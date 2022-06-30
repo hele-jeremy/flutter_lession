@@ -228,10 +228,69 @@ class DartBuiltInTypes extends StatelessWidget {
   }
 
   void _mapType() {
+    void printMap(String tags, Map map) {
+      var mapEntryList = map.entries.toList(growable: false);
+      LogUtils.d("map runtimeType : ${map.runtimeType}");
+      for (int i = 0; i < mapEntryList.length; i++) {
+        var entry = mapEntryList[i];
+        LogUtils.d(
+            "$tags entryName : ${entry.key} entryValue : ${entry.value}");
+      }
+    }
+
     /**
      * map集合类型：
      */
+    //没有指定泛型的map集合，可以存储任意类型的key-value数据
+    Map names = {
+      "hoko": "何乐",
+      "xiaoming": "小明",
+      "kobe": "科比",
+      "status": false,
+      true: 100,
+      1.11: null
+    }; //_InternalLinkedHashMap<dynamic, dynamic>
+    printMap("names", names);
 
+    //通过泛型来指定Map集合的key-value类型
+    Map<String, int> ages = {};
+    ages["hoko"] = 22;
+    ages["kobe"] = 33;
+    ages["yaoming"] = 39;
+    printMap("ages", ages);
 
+    //map的遍历
+    ages.forEach((key, value) {
+      LogUtils.d("ages forEach: key = $key value = $value");
+    });
+
+    for (final entry in ages.entries) {
+      LogUtils.d(
+          "age fori: key = ${entry.key} value = ${entry.value} runtimeType = ${entry.runtimeType}");
+    }
+
+    LogUtils.d("ages.keys : ${ages.keys} ages.values : ${ages.values}");
+    LogUtils.d(
+        "ages.keys.runtimeType : ${ages.keys.runtimeType} ags.values.runtimeType : ${ages.values.runtimeType}");
+    //查找[key]的值，如果不存在，调用[ifAbsent]来获取一个新值，关联到[key]，并返回新值，如果有，则返回与[key]相关联的值。
+    var putFLutter = ages.putIfAbsent("flutter", () => 4);
+    //map中的key是唯一的,添加相同的key-value,会用新的value替换旧的value
+    var putKotlin = ages["kotlin"] = 8;
+    LogUtils.d("putKotlin = $putKotlin");
+    var putKotlin2 = ages["kotlin"] = 11;
+    LogUtils.d("putKotlin2 = $putKotlin2");
+    LogUtils.d("putFlutter : $putFLutter");
+    printMap("putFlutterAges", ages);
+    var putHoko = ages.putIfAbsent("hoko", () => 99);
+    LogUtils.d("putHoko : $putHoko");
+    printMap("putHokoMap", ages);
+
+    //map的一些流式转换操作
+    var ageReverse = ages
+        .map((key, value) => MapEntry(value, key)); //key - value -> value -key
+    var putDart = ageReverse.putIfAbsent(5, () => "Dart");
+
+    LogUtils.d("putDart : $putDart");
+    printMap("putDartMap", ageReverse);
   }
 }

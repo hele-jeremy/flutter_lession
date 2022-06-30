@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_lesson/dart_lesson/dart_%E5%87%BD%E6%95%B0function.dart';
 import 'package:flutter_lesson/global.dart';
 
 
@@ -41,7 +42,8 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text(widget.title),
         ),
         body:
-            const DartBuiltInTypes() // This trailing comma makes auto-formatting nicer for build methods.
+            // const DartBuiltInTypes() // This trailing comma makes auto-formatting nicer for build methods.
+            const DartFunction() // This trailing comma makes auto-formatting nicer for build methods.
         );
   }
 }

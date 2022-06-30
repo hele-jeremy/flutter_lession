@@ -64,6 +64,12 @@ class DartBuiltInTypes extends StatelessWidget {
     //double 浮点数类型
     double d = 44.242;
     LogUtils.d("num1 = $num1,num2 = $num2,i = $i,d = $d");
+
+    ///在生产环境代码中 assert() 函数会被忽略，不会被调用。 在开发过程中, assert(condition) 会在非 true 的条件下抛出异常.
+    assert(num1 == 2);
+
+    double dd = 1;
+    assert(dd == 1.0);
   }
 
   void _stringType() {
@@ -117,6 +123,15 @@ class DartBuiltInTypes extends StatelessWidget {
       LogUtils.d(
           "split for runtimeType : ${value.runtimeType} current : ${value.toString()}");
     }
+    //'''''' / """"""创建多行字符串
+    String sss = '''
+    通过\'\'\'\'\'\'或者""""""
+    创建多行字符串
+    ''';
+    //使用r前缀表示原始raw字符串
+    String rawStr = r"In a raw string, even \n isn't special.";
+    LogUtils.d("sss : $sss");
+    LogUtils.d("rawStr : $rawStr");
   }
 
   void _boolType() {
@@ -231,6 +246,9 @@ class DartBuiltInTypes extends StatelessWidget {
       LogUtils.d("list7 indexWhere2 each : $element");
       return element.isOdd;
     })}");
+
+    List<int> intList = const [1,2,3];  //可读不可写
+    // intList.add(100);  //运行时异常:Unsupported operation: Cannot add to an unmodifiable list
   }
 
   void _mapType() {
@@ -354,7 +372,6 @@ class DartBuiltInTypes extends StatelessWidget {
     LogUtils.d("doubleD1 = $doubleD1");
     LogUtils.d(
         "d1 = $d1 d1.runtimeType : ${d1.runtimeType}\nd2 = $d2 d2.runtimeType : ${d2.runtimeType}");
-
 
     //一般使用var定义变量,建议对该变量赋初始值,对于没有赋初始值的变量，建议直接显式的声明该变量的类型
     /*

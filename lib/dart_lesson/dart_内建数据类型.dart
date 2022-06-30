@@ -40,6 +40,12 @@ class DartBuiltInTypes extends StatelessWidget {
               onPressed: _mapType,
               child:
                   Text("Map集合类型", style: Theme.of(context).textTheme.headline6))
+        ]),
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          MaterialButton(
+              onPressed: _varObjectDynamic,
+              child: Text("var Object dynamic三者的区别",
+                  style: Theme.of(context).textTheme.headline6))
         ])
       ],
     );
@@ -292,5 +298,88 @@ class DartBuiltInTypes extends StatelessWidget {
 
     LogUtils.d("putDart : $putDart");
     printMap("putDartMap", ageReverse);
+  }
+
+  void _varObjectDynamic() {
+    /**
+     * dart中var Object dynamic三者的区别:
+     */
+    var var1 = "hello"; //Dart为强类型语言,通过var定义变量，编译器会进行自动类型推断,var1的类型为定义时赋的初始值的类型
+    // var1 = 1; //A value of type 'int' can't be assigned to a variable of type 'String'.
+
+    var var2; //var定义的变量初始化的时候，没有赋初始值的情况下后续可以赋予任何类型的值
+    var2 = "hello";
+    var2 = 999;
+    var2 = false;
+    LogUtils.d(
+        "var1 = $var1 var1.runtimeType = ${var1.runtimeType}\nvar2 = $var2 var2.runtimeType = ${var2.runtimeType}");
+
+    //The base class for all Dart objects except `null`.
+    //Dart中Object是所有类的基类,除了Null这种类型以外
+    Object obj;
+    obj = "flutter Object";
+    obj = 2.22;
+    Object obj2 = "hello dart";
+    obj2 = 10;
+    obj2 = [
+      1,
+      "2",
+      false,
+      {"hoko": 22}
+    ];
+    LogUtils.d(
+        "obj = $obj obj.runtimeType :${obj.runtimeType} obj2 = $obj2 obj2.runtimeType = ${obj2.runtimeType}");
+    //Object类型的在编译期间就会做类型检查，因为obj没有toInt方法因此编译期间就会报错
+    // obj.toInt();//The method 'toInt' isn't defined for the type 'Object'.
+    LogUtils.d(obj2
+        .toString()); //toString()方法是Object类的方法因此编译可以通过,Object类型的对象只能够调用Object自身的方法,例如toString() hashCode()这些方法
+
+    //通过dynamic来定义变量
+    dynamic d1, d2 = "hello";
+    d1 = "dart";
+    d1 = 22;
+    d2 = true;
+    d2 = {"hoko": 22, "kobe": 36, 22: "jeremy"};
+
+    LogUtils.d(
+        "d1 = $d1 d1.runtimeType : ${d1.runtimeType}\nd2 = $d2 d2.runtimeType : ${d2.runtimeType}");
+
+    var doubleD1 = d1.toDouble();
+    d2["android"] = 10;
+    //dynamic类型的变量不会在编译期做类型检查，因此导致dynamic类型的变量可以调用任意类型的方法,如果调用的方法或使用的变量不属于该对象的话就会在
+    //运行期报错,通常情况下不推荐直接使用dynamic这种类型
+    //https://dart-lang.github.io/linter/lints/prefer_typing_uninitialized_variables.html
+    //对于未初始化的变量，放弃类型注释是一种糟糕的实践，因为您可能会意外地将它们赋值给您最初不打算赋值的类型。
+    // d2.add(22);  //Class '_InternalLinkedHashMap<Object, Object>' has no instance method 'add'.
+    LogUtils.d("doubleD1 = $doubleD1");
+    LogUtils.d(
+        "d1 = $d1 d1.runtimeType : ${d1.runtimeType}\nd2 = $d2 d2.runtimeType : ${d2.runtimeType}");
+
+
+    //一般使用var定义变量,建议对该变量赋初始值,对于没有赋初始值的变量，建议直接显式的声明该变量的类型
+    /*
+        class GoodClass {
+         static var bar = 7;
+         var foo = 42;
+         int baz; // OK
+
+         void method() {
+          int baz;
+          var bar = 5;
+          ...
+        }
+       }
+     */
+
+    ///dynamic、var、Object三者的区别
+    ///dynamic：是所有Dart对象的基础类型，在大多数情况下，通常不直接使用它，
+    ///通过它定义的变量会关闭类型检查，这意味着 dynamic x = 'hal';x.foo();
+    ///这段代码静态类型检查不会报错，但是运行时会crash，因为x并没有foo()方法，所以建议大家在编程时不要直接使用dynamic；
+    ///var：是一个关键字，意思是“我不关心这里的类型是什么。”，系统会自动推断类型runtimeType；
+    ///Object：是Dart对象的基类，当你定义：Object o=xxx；时这时候系统会认为o是个对象，你可以调用o的toString()和hashCode()方法
+    ///因为Object提供了这些方法，但是如果你尝试调用o.foo()时，静态类型检查会进行报错；
+    ///综上不难看出dynamic与Object的最大的区别是在静态类型检查上；
+    /// var 初始化确定类型后不可更改类型， Object 以及dynamic 可以更改类型
+    /// Object编译阶段检查类型, 而dynamic编译阶段不检查类型
   }
 }

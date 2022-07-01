@@ -48,6 +48,15 @@ class DartFunction extends StatelessWidget {
 
     LogUtils.d("----变量作用域-----");
     functionTest.lexicalScopeFun();
+
+    LogUtils.d("----闭包Closure-----");
+    functionTest.closureTest();
+
+    LogUtils.d("----函数相等性-----");
+    functionTest.funcEqualsTest();
+
+    LogUtils.d("----函数返回值-----");
+    functionTest.funcRetrunValueTest();
   }
 }
 
@@ -185,12 +194,13 @@ class FunctionTest {
 
   //变量作用域:Dart的作用域和java类似
   bool topLevel = true;
+
   void lexicalScopeFun() {
     var insideLexical = true;
 
     void myFunction() {
       var insideMyFunction = true;
-    //nestedFunction()函数可以访问包括顶层变量以内的所有变量
+      //nestedFunction()函数可以访问包括顶层变量以内的所有变量
       void nestedFunction() {
         var insideNestedFunction = true;
         assert(topTopLevel);
@@ -199,12 +209,114 @@ class FunctionTest {
         assert(insideMyFunction);
         assert(insideNestedFunction);
       }
+
       nestedFunction();
     }
+
     myFunction();
   }
 
   //https://www.ruanyifeng.com/blog/2009/08/learning_javascript_closures.html
+  //https://flutter.cn/community/tutorials/deep-dive-into-dart-s-function-closure
+  //https://cloud.tencent.com/developer/article/1644633
   //闭包(Closure)
+  //makeAdder函数，接收一个int类型的参数，返回一个Function即函数
+  Function makeAdder(int addBy) {
+    return (int i) => addBy + i;
+  }
 
+  void closureTest() {
+    //add add2的类型都是函数类型 表达方式为: (参数类型) => 返回值类型
+    var add = makeAdder(10); //(int) => int  add相当于一个这种函数: (int i) => i + 10;
+    var add2 = makeAdder(20); //(int) => int  add2相当于一个这种函数: (int i) => i + 20
+    var add3 = Function.apply(
+        makeAdder, [30]); //(int) => int add3相当于一个这种函数 (int i) => i + 30;
+
+    LogUtils.d("add(2) = ${add(2)} add.runtimeType =  ${add.runtimeType}");
+    LogUtils.d("add2(10) = ${add2(10)} add2.runtimeType = ${add2.runtimeType}");
+    LogUtils.d("add3(10) = ${add3(10)} add3.runtimeType = ${add3.runtimeType}");
+    LogUtils.d(
+        "Function.apply(makeAdder, [10]) ${Function.apply(makeAdder, [10])}");
+    LogUtils.d("Function.apply(add2, [10]) ${Function.apply(add2, [10])}");
+    //函数的调用方式
+    assert(add(2) == 12); //简写方式
+    assert(add2.call(10) == 30); //通过call()方式调用
+    assert(Function.apply(add3, [2]) == 32); //通过Function.apply()静态方法来调用
+  }
+
+//函数相等性测试
+  void funcEqualsTest() {
+    Function x;
+    x = topTopLevelFunc;
+    assert(x == topTopLevelFunc);
+
+    x = FunctionEqualsTest.sFunc;
+
+    assert(FunctionEqualsTest.sFunc == x);
+
+    var a = FunctionEqualsTest();
+    var b = FunctionEqualsTest();
+
+    var c = b;
+
+    x = b.func;
+    assert(c.func == x);
+
+    assert(c.func != a.func);
+
+    LogUtils.d("""
+            topTopLevelFunc : ${topTopLevelFunc.runtimeType}
+            FunctionEqualsTest.sFunc : ${FunctionEqualsTest.sFunc.runtimeType}
+            a.func : ${a.func.runtimeType}
+    """);
+  }
+
+  //函数的返回值
+  //dart中函数如果没有显式的返回语句,最后一行默认认为执行return null
+  rFunc1() {}
+
+  //void 是一个例外，不会默认返回null
+  void rFunc2() {}
+
+  Function rFunc3() => (int i) => i * i;
+
+  rFunc4() => "hello";
+
+  double rFunc5() {
+    return 43.22;
+  }
+
+  dynamic rFunc6() {}
+
+  dynamic rFunc7() {
+    return "dart";
+  }
+
+  rFunc8() {
+    return "flutter";
+  }
+
+  String? rFunc9() {
+    "default";
+  }
+
+  void funcRetrunValueTest() {
+    LogUtils.d("rFunc1() : ${rFunc1()}");
+    // LogUtils.d("rFunc2() : ${rFunc2()}");  //This expression has a type of 'void' so its value can't be used
+    LogUtils.d("rFunc3() : ${rFunc3()}");
+    LogUtils.d("rFunc4() : ${rFunc4()}");
+    LogUtils.d("rFunc5() : ${rFunc5()}");
+    LogUtils.d("rFunc6() : ${rFunc6()}");
+    LogUtils.d("rFunc7() : ${rFunc7()}");
+    LogUtils.d("rFunc8() : ${rFunc8()}");
+    LogUtils.d("rFunc9() : ${rFunc9()}");
+  }
+}
+
+void topTopLevelFunc() {}
+
+class FunctionEqualsTest {
+  static void sFunc() {}
+
+  void func() {}
 }

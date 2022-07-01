@@ -24,6 +24,11 @@ class DartFunction extends StatelessWidget {
     LogUtils.d(functionTest.isNoble2(1000));
     LogUtils.d(functionTest.isNoble3(200));
     LogUtils.d(functionTest.isNoble3(1000));
+    functionTest.wrapPrint("testPrint");
+    var simplifyTest = functionTest.simplifyTest(true);
+    //打印test()方法的类型为set集合类型所以例子中的 => 和 ; 之间依然是一个表达式
+    LogUtils.d(
+        "simplifyTest : $simplifyTest simplifyTest.runtimeType = ${simplifyTest.runtimeType}");
 
     LogUtils.d("----函数参数类型 命名参数-----");
 
@@ -83,7 +88,19 @@ class FunctionTest {
 
   //如果函数体只有一个表达式，可以省略掉大括号{}直接简写
   //语法=>表达式是{return 表达式;}的简写,=>也别称之为箭头函数
-  //注意在=>与;之间只能是表达式而非语句
+  //注意在=>与;之间只能是表达式而非语句 比如 => 和 ; 之间不能放 if 语句，但可以放 条件表达式(condition ? expr1 : expr2)
+  // 但是经过测试发现 => 和 ; 之间可以放一条非控制流语句，如：
+  // ignore: avoid_print
+  wrapPrint(String msg) => print("::$msg");
+
+  ////上面提到 => 和 ; 之间不能放 if语句, 可能开发者在把普通函数改成箭头函数忘记了删除花括号{}
+  //这不是使用了 if表达式 了吗？但是下面的例子 => 和 ; 之间其实是一个 Set 集合, {}不仅在定义函数的时候用到，
+  // 在构建 Set、Map集合字面量 的时候也用到了，然后在构建 Set 字面量的时候使用 if 语句而已(collection if-for)
+  simplifyTest(bool flag) => {
+        // if (flag) {LogUtils.d("success")} //注意有{}表示的是set或者map这里要去掉{}才能表示添加一个非set/map类型的元素到set集合中
+        if (flag) LogUtils.d("success")
+      }; //{{null}} simplifyTest.runtimeType = _CompactLinkedHashSet<Set<void>>  / {null} simplifyTest.runtimeType = _CompactLinkedHashSet<void>
+
   bool isNoble3(int type) => _nobleGases[type] != null;
 
   //函数参数有两种形式:
@@ -193,6 +210,9 @@ class FunctionTest {
   }
 
   //变量作用域:Dart的作用域和java类似
+  // 1. Lexical scope
+// Lexical scope 也称之为 静态作用域(Static Scope), 也就是说变量的作用域是静态确定的
+// 外部不能访问内部作用域的变量, 但是内部作用域可以访问外部作用域的变量
   bool topLevel = true;
 
   void lexicalScopeFun() {
@@ -216,10 +236,22 @@ class FunctionTest {
     myFunction();
   }
 
+  //  相对地, 有 Static Scope 就有 Dynamic Scope , 动态作用域就是说变量的作用域是动态确定的
+  // void fun() {
+  //   print("x = $x");
+  // }
+  //
+  // void dummy1() {
+  //   int x = 5;
+  //   fun();
+  // }
+//  例如上面的代码, 在 fun 函数中并没有定义 x 变量, 该变量在 dummy1 函数中定义了, dummy1 函数调用了 fun 函数,所以 fun 函数中使用的 x 变量就是 dummy1 函数的中 x
+
   //https://www.ruanyifeng.com/blog/2009/08/learning_javascript_closures.html
   //https://flutter.cn/community/tutorials/deep-dive-into-dart-s-function-closure
   //https://cloud.tencent.com/developer/article/1644633
-  //闭包(Closure)
+  //Lexical closures
+  //闭包(Closure) :closures 可以理解为一个匿名函数, 它可以访问它自己的作用域内的变量, 哪怕变量已经超过了外部函数的作用域
   //makeAdder函数，接收一个int类型的参数，返回一个Function即函数
   Function makeAdder(int addBy) {
     return (int i) => addBy + i;

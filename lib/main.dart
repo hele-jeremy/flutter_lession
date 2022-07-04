@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_lesson/dart_lesson/dart_%E5%87%BD%E6%95%B0function.dart';
-import 'package:flutter_lesson/global.dart';
+import 'package:flutter_lesson/dart_lesson/dart_%E8%BF%90%E7%AE%97%E7%AC%A6.dart';
 
 
-import 'dart_lesson/dart_内建数据类型.dart';
-
+import 'global.dart';
 
 void main() {
   Global.init();
@@ -43,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body:
             // const DartBuiltInTypes() // This trailing comma makes auto-formatting nicer for build methods.
-            const DartFunction() // This trailing comma makes auto-formatting nicer for build methods.
-        );
+            // const DartFunction() // This trailing comma makes auto-formatting nicer for build methods.
+            const DartOperator());
   }
 }

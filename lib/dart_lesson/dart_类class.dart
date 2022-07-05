@@ -54,11 +54,57 @@ class DartClasses extends StatelessWidget {
 
     LogUtils.d(
         "-----------------------------------------------------------------");
+
     var profileMark = ProfileMark("pro1");
     profileMark.increase();
-    var profileMark2 = ProfileMark.unNamed();
-    var profileMark3 = ProfileMark.unNamed2();
-    LogUtils.d("$profileMark\n$profileMark2\n$profileMark3");
+    LogUtils.d(profileMark);
+    var profileMark2 = ProfileMark.unNamed(33);
+    profileMark2.increase();
+    LogUtils.d(profileMark2);
+    var profileMark3 = ProfileMark.unNamed2(20);
+    LogUtils.d(profileMark3);
+
+    var animal = Animal();
+    LogUtils.d("animal: $animal");
+
+    var staff = Staff.fromJson({"a": 1, "b": 2});
+    LogUtils.d(staff);
+
+    var staff2 = Staff({"A": 1, "B": 2});
+    LogUtils.d("staff2 : $staff2");
+
+    var vector3ds = Vector3ds.yzPlane(y: 2.22, z: 2.2);
+    LogUtils.d(vector3ds);
+
+    var vector3ds2 = Vector3ds.withAssert(1.1, 2.2, -1.3);
+    LogUtils.d(vector3ds2);
+    var vector3ds3 = Vector3ds(1.0, 2.0);
+    LogUtils.d(vector3ds3.toString());
+
+    var vector2ds = Vector2ds(1.1, 2.2);
+    var vector2ds2 = Vector2ds(1.1, 3.3);
+    var vector2ds3 = Vector2ds(1.1, 2.2);
+    assert(vector2ds != vector2ds2);
+    assert(vector2ds != vector2ds3);
+    assert(!identical(vector2ds, vector2ds2));
+    assert(!identical(vector2ds, vector3ds3));
+
+    var immutablePoint = const ImmutablePoint(2.2, 3.3);
+    var immutablePoint2 = const ImmutablePoint(1.1, 9.9);
+    var immutablePoint3 = const ImmutablePoint(2.2, 3.3);
+    var immutablePoint4 = const ImmutablePoint.fromJson(2.2, 3.3);
+    var immutablePoint5 = ImmutablePoint(2.2, 3.3);
+    var immutablePoint6 = ImmutablePoint.fromJson2(2.22);
+    assert(immutablePoint != immutablePoint2);
+    assert(!identical(immutablePoint, immutablePoint2));
+    assert(immutablePoint == immutablePoint3);
+    assert(identical(immutablePoint, immutablePoint3));
+    assert(immutablePoint == immutablePoint4);
+    assert(identical(immutablePoint, immutablePoint4));
+    // assert(immutablePoint == immutablePoint5);
+    // assert(identical(immutablePoint, immutablePoint5));
+    // assert(immutablePoint == immutablePoint6);
+    // assert(identical(immutablePoint, immutablePoint6));
   }
 }
 
@@ -132,7 +178,7 @@ class Person {
       [String name = "default", String sex = "male", double height = 0.0])
       : this(name, sex, height);
 
-  //重定向构造函数不能进行字段的初始化
+  //重定向构造函数不能进行字段的初始化 同时重定向构造函数使用this重定向到类中的其他构造函数,使用super的不属于重定向构造函数
   // Person.from(this.name,String sex) : this(sex,2.22); //The redirecting constructor can't have a field initializer.
 
   //成员方法
@@ -167,21 +213,137 @@ class ProfileMark {
   final String name;
   final DateTime start = DateTime.now();
 
-  //如果想在构造函数调用开始后,对final修饰的变量进行赋值操作,可以有一下两种方式:
+  //如果想在构造函数调用开始后,对final修饰的变量进行赋值操作,可以有以下两种方式:
+  //使用工厂构造函数 factory constructor
+  //使用late修饰final类型的变量,但是要注意late final修饰的变量没有初始化器的情况下，会对其添加一个setter API
   late final int count;
 
-  void increase(){
+  void increase() {
+    //count 变量使用late final修饰，由于其没有一个默认的初始化值,并且由于其使用了late进行了修饰
+    //因此其可以不用在构造函数中进行初始化,并且为其添加了一个setter api,可以为其进行赋值操作
+    //但是要注意 late 修饰的non-null非空类型的变量,在使用之前必须要进行初始化，否则抛出异常
     count = Random().nextInt(200);
+
+    // name = "hoko"; //'name' can't be used as a setter because it's final.
   }
 
   ProfileMark(this.name);
 
-  ProfileMark.unNamed() : this("pro2");
+  //Redirecting constructors can't have a body 重定向构造函数不能有函数体
+  // ProfileMark.unNamed(int count) : this("pro2"){}
 
-  ProfileMark.unNamed2() : name = "pro3";
+  // ProfileMark.nuNamed(this.count) : this("pro2"); //The redirecting constructor can't have a field initializer.
+  ProfileMark.unNamed(int count) : this("pro2");
+
+  //注意:unNamed是重定向构造函数，而unNamed2 是命名构造函数不是重定向构造函数
+  ProfileMark.unNamed2(this.count) : name = "pro3";
 
   @override
   String toString() {
     return 'ProfileMark{name: $name, start: $start, count: $count}';
   }
+}
+
+class Animal {
+  //默认构造函数，如果类中没有声明构造函数，dart会默认给我们生成一个无参构造函数,并且该构造函数会调用父类的无参构造函数
+  //构造函数不会被继承，如果子类没有声明构造函数,会有一个默认的无参构造函数
+}
+
+class People {
+  String? firstName;
+
+  People.fromJson(Map data) {
+    LogUtils.d("in people:$data");
+  }
+}
+
+class Staff extends People {
+  // Staff.fromJson(Map data) : super.fromJson(data) {
+  //   LogUtils.d("in Staff:$data");
+  // }
+
+  Staff.fromJson(super.data) : super.fromJson() {
+    LogUtils.d("in Staff:");
+  }
+
+  Staff(Map data) : super.fromJson(data);
+// Staff(super.data) : super.fromJson();
+}
+
+//使用父类构造参数
+class Vector2d {
+  final double x;
+  final double y;
+
+  Vector2d(this.x, this.y);
+}
+
+class Vector3d extends Vector2d {
+  final double z;
+
+  //常规写法
+  // Vector3d(final double x, final double y, this.z) : super(x, y);
+  //子类构造函数中使用超类参数
+  Vector3d(super.x, super.y, this.z);
+}
+
+class Vector2ds {
+  final double x;
+  final double y;
+
+  Vector2ds.named({required this.x, required this.y});
+
+  Vector2ds(this.x, this.y);
+
+// Vector2ds.named([this.x = 22.2, this.y = 4.3]);
+}
+
+class Vector3ds extends Vector2ds {
+  final double z;
+
+  //父类构造的位置参数如果已经被使用,那么父类构造参数就不能再继续使用被占用的位置,同时父类构造函数的参数可以始终是命名参数(since dart 2.17)
+  Vector3ds.yzPlane({required double y, required this.z})
+      : super.named(x: 2.2, y: y);
+
+// Vector3ds.yzPlane({required super.y, required this.z}) : super.named(x: 2.2);
+
+// Vector3ds.yzPlane({required double y, required this.z})
+//     : super.named(2.2, y);
+
+  Vector3ds.fromJson(Map<String, double> jsonData, super.x, super.y)
+      : z = jsonData["z"]!;
+
+  Vector3ds.fromJson2(Map<String, double> jsonData, this.z)
+      : super.named(x: jsonData["x"]!, y: jsonData["y"]!);
+
+  //开发模式下可以使用断言来验证输入的参数数据
+  Vector3ds.withAssert(this.z, super.x, super.y)
+      : assert(z >= 0, "z must be > 0"),
+        assert(x >= 0, "x must be > 0"),
+        assert(y <= 0, "y must be < 0");
+
+  //使用初始化列表可以很方便的初始化final变量
+  Vector3ds(super.x, super.y) : z = sqrt((x * x) + (y * y));
+
+  @override
+  String toString() {
+    return 'Vector3ds{x: ${super.x} y: ${super.y} z: $z}';
+  }
+}
+
+//常量构造函数
+class ImmutablePoint {
+  static const ImmutablePoint origin = ImmutablePoint(0, 0);
+  final double x, y;
+
+  //使用常量构造函数创建编译时常量
+  const ImmutablePoint(this.x, this.y);
+
+  // const ImmutablePoint.fromJson(Map<String, double> jsonData)
+  //     : x = jsonData["x"]!,
+  //       y = jsonData["y"]!;  //Invalid constant value.
+
+  const ImmutablePoint.fromJson(this.x, this.y);
+
+  const ImmutablePoint.fromJson2(this.x, {this.y = 2.2});
 }

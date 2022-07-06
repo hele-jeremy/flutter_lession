@@ -105,6 +105,69 @@ class DartClasses extends StatelessWidget {
     // assert(identical(immutablePoint, immutablePoint5));
     // assert(immutablePoint == immutablePoint6);
     // assert(identical(immutablePoint, immutablePoint6));
+
+    var immutablePoint7 = const ImmutablePoint(2, 3);
+    var immutablePoint8 = const ImmutablePoint(2, 2);
+    assert(immutablePoint7 + immutablePoint8 == const ImmutablePoint(4, 5));
+    assert(immutablePoint7 - immutablePoint8 == const ImmutablePoint(0, 1));
+
+    LogUtils.d("factory 工厂构造函数...");
+    var logger = Logger("dev");
+    var logger2 = Logger.fromJson({"name": "dev"});
+    var logger3 = Logger.fromJson({"name": "pro"});
+    assert(logger == logger2);
+    assert(identical(logger, logger2));
+    assert(logger != logger3);
+    assert(!identical(logger, logger3));
+
+    LogUtils.d("setter/getter方法......");
+    var rectangle = Rectangle(1.1, 2.2, 2.2, 3.3);
+    LogUtils.d(rectangle);
+    //dart中的小数位数问题
+    assert(rectangle.right.toStringAsFixed(1) == "3.3");
+    rectangle.right = 5.5;
+    LogUtils.d(rectangle);
+    assert(rectangle.left == 3.3);
+
+    LogUtils.d("抽象类abstract........");
+    var absContainer = AbsContainer.fromCount(200);
+    LogUtils.d(absContainer);
+    LogUtils.d("隐式接口Implicitly interface.....");
+    LogUtils.d(greetBob(ImplicitPerson("hoko")));
+    LogUtils.d(greetBob(Impostor()));
+    assert(Impostor().compareTo(Impostor()) == 0);
+    dynamic impostor = Impostor();
+    impostor.a();
+    var a = impostor.a;
+
+    LogUtils.d("扩展方法Extension methods.......");
+    assert("22".padLeft(3, "*") == "*22");
+    assert(int.parse("22") == 22);
+    assert("22".parseInt() == 22);
+    assert("2.22".parseDouble() == 2.22);
+
+    //Class 'String' has no instance method 'parseInt'.
+    //不能对动态类型的变量调用扩展方法,否则会抛出NoSuchMethodError异常
+    dynamic da = "22";
+    // assert(da.parseInt() == 22);
+    //而对于var类型的变量则是可以调用扩展方法的，因为var类型的变量
+    //在第一次赋值的时候，通过类型推断就可以确定其类型
+    var va = "22";
+    assert(va.parseInt() == 22);
+    var list = <String>[for (int i1 = 0; i1 < 5; i1++) "kobe-$i1"];
+    assert(list.doubleLength == 10);
+    LogUtils.d(-list);
+    LogUtils.d(list.split(3));
+
+    var from =
+        PlanetExtensions.from(<String, Object>{"name": "hoko", "size": 22});
+    // assert(from == const Planet("hoko",22,));
+    // assert(identical(from, const Planet("hoko", 22)));
+    LogUtils.d(from);
+    var tips = "hello worls!";
+    LogUtils.d(tips.scream());
+
+    5.times((p0) => LogUtils.d("5.times -- $p0"));
   }
 }
 
@@ -346,4 +409,220 @@ class ImmutablePoint {
   const ImmutablePoint.fromJson(this.x, this.y);
 
   const ImmutablePoint.fromJson2(this.x, {this.y = 2.2});
+
+  //重写操作符
+  ImmutablePoint operator +(ImmutablePoint other) =>
+      ImmutablePoint(x + other.x, y + other.y);
+
+  ImmutablePoint operator -(ImmutablePoint other) =>
+      ImmutablePoint(x - other.x, y - other.y);
+
+  @override
+  bool operator ==(Object other) =>
+      other is ImmutablePoint && x == other.x && y == other.y;
+
+  @override
+  int get hashCode => Object.hash(x, y);
+}
+
+//工厂构造函数 factory
+class Logger {
+  final String name;
+  bool mute = false;
+
+  static final Map<String, Logger> _cache = <String, Logger>{};
+
+  factory Logger(String name) {
+    return _cache.putIfAbsent(name, () => Logger._internal(name));
+  }
+
+  factory Logger.fromJson(Map<String, Object> jsonData) {
+    //工厂构造函数中不能访问this
+    // this.mute = false;
+    return Logger(jsonData["name"].toString());
+  }
+
+  Logger._internal(this.name);
+
+  void log(String msg) {
+    if (!mute) {
+      // ignore: avoid_print
+      print(msg);
+    }
+  }
+
+  @override
+  String toString() {
+    return 'Logger{namne: $name, mute: $mute}';
+  }
+}
+
+//getter/setter方法
+class Rectangle {
+  double left, top, width, height;
+
+  Rectangle(this.left, this.top, this.width, this.height);
+
+  double get right => left + width;
+
+  double get bottom => top + height;
+
+  set right(double value) => left = value - width;
+
+  set bottom(double value) => top = value - height;
+
+  @override
+  String toString() {
+    return 'Rectangle{left: $left, top: $top, width: $width, height: $height, right: $right, bottom: $bottom}';
+  }
+}
+
+//抽象类 abstract
+//抽象类无法实例化
+//抽象类可以定义抽象方法，抽象变量
+abstract class AbsContainer {
+  int count;
+
+  //定义一个抽象变量
+  abstract int a;
+
+  //定义了一个抽象方法
+  void updateChildren();
+
+  //也可以有具体的方法实现
+  void detailAction() {}
+
+  AbsContainer(this.count); //不能够实例化
+
+  //抽象类如果想被实例化，可以通过提供一个工厂构造函数，返回其实现的具体子类
+  // factory AbsContainer.fromCount(int count) => AbsContainer(count); //不能够实例化
+  factory AbsContainer.fromCount(int count) => Box(100, count);
+
+  // AbsContainer.mock(this.count); //不能够实例化
+
+  @override
+  String toString() => 'AbsContainer{count: $count, a: $a}';
+}
+
+class Box extends AbsContainer {
+  @override
+  int a;
+
+  Box(this.a, super.count) : super();
+
+  @override
+  void updateChildren() {}
+}
+
+//隐式接口 implicit interface
+//Dart中的每个类都提供了一个隐式接口,这个接口包含了该类的所有的实例(instance)成员(变量和方法)
+//以及这个类实现的其他接口的实例成员,同时该类实现了这个隐式接口
+//如果想创建一个A类支持调用B类的API但是又不想继承(extends)B类，则可以实现(implements)B类的接口(隐式接口)
+
+//ImplicitPerson 相当于相当于实现了ImplicitPerson隐式接口
+//这个接口包含了greet()方法 以及_name变量
+class ImplicitPerson {
+  //在接口中仅对当前library文件可见
+  final String _name;
+
+  //构造函数不包含在接口中
+  ImplicitPerson(this._name);
+
+  //包含在接口中，并对外可见
+  String greet(String who) => "Hello, $who. I am $_name";
+}
+
+class Impostor implements ImplicitPerson, Comparable<Impostor> {
+  @override
+  String get _name => "Impostor";
+
+  @override
+  String greet(String who) => "Hi $who. Do you know who I am?";
+
+  @override
+  int compareTo(Impostor other) => _name.compareTo(other._name);
+
+  @override
+  int get hashCode => Object.hashAll([_name]);
+
+  @override
+  bool operator ==(Object other) => other is Impostor && other._name == _name;
+
+  //dynamic类型的变量,调用了不存在的方法或者变量的情况下
+  //会触发noSuchMethod方法,可以重写该方法，来记录和跟踪这一行为
+  //否则会抛出NoSuchMethodError
+  @override
+  noSuchMethod(Invocation invocation) {
+    LogUtils.d("$this \ninvocation:$invocation\n${invocation.runtimeType}");
+  }
+}
+
+String greetBob(ImplicitPerson person) => person.greet("Bob");
+
+//扩展 https://dart.cn/guides/language/extension-methods
+//扩展不仅可以扩展方法,也可以扩展很多的类型，例如：getter/setter/operarator操作符
+
+extension NumberParsing on String {
+  int parseInt() {
+    return int.parse(this);
+  }
+
+  double parseDouble() {
+    return double.parse(this);
+  }
+
+  String scream() => toUpperCase();
+}
+
+extension IntExtension on int {
+  void times(void Function(int) f) {
+    for (int i = 0; i < this; i++) {
+      Function.apply(f, toList());
+    }
+  }
+
+  List<int> toList() => [this];
+
+  List<int> toListWithValue(int value) => [value];
+}
+
+extension ObjectExtension on Object {
+  int nah() => hashCode + 42;
+
+  Type type() => runtimeType;
+
+  bool notAgain(Object other) => this != other;
+}
+
+extension ObjectNorExtension on Object? {
+  String stop(String x) => "${toString()}$x";
+}
+
+//带泛型的扩展
+extension MyCustomList<T> on List<T> {
+  int get doubleLength => length * 2;
+
+  List<T> operator -() => reversed.toList();
+
+  List<List<T>> split(int at) => [sublist(0, at), sublist(at)];
+}
+
+class Planet {
+  final String name;
+  final int size;
+
+  const Planet(this.name, this.size);
+
+  @override
+  String toString() {
+    return 'Planet{name: $name, size: $size}';
+  }
+}
+
+extension PlanetExtensions on Planet {
+  //静态扩展函数
+  static Planet from(Map<String, Object> json) =>
+      Planet(json["name"] as String, json["size"] as int);
+
+  Map<String, Object> toJson() => {"name": name, "size": size};
 }

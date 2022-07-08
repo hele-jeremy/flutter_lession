@@ -1,3 +1,5 @@
+import 'package:flutter_lesson/dart_lesson/dart_%E7%B1%BBclass.dart';
+
 ///使用factory工厂构造方法实现单例模式
 class MySingleton {
   num _count;
@@ -23,4 +25,12 @@ class MySingleton {
 
   @override
   String toString() => 'MySingleton{count: $_count}';
+}
+
+class OutImpostor implements ImplicitPerson{
+  @override
+  String greet(String who) => who;
+
+  // @override
+  // String get name => toString();
 }

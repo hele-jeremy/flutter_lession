@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_lesson/dart_lesson/mixin/dart_%E7%BB%A7%E6%89%BFextensions_%E5%AE%9E%E7%8E%B0implements_%E6%B7%B7%E5%90%88mixin.dart';
 
 import 'dart_lesson/dart_类class.dart';
 import 'global.dart';
@@ -41,9 +42,10 @@ class _MyHomePageState extends State<MyHomePage> {
           // const DartFunction() // This trailing comma makes auto-formatting nicer for build methods.
           // const DartOperator(),
           // const DartException(),
-          const DartClasses(),
+          // const DartClasses(),
           // const DartExtensions(),
           // const DartEnums(),
+          const DartExtensionImplementsMixin(),
     );
   }
 }

@@ -564,6 +564,7 @@ class Box extends AbsContainer {
   // Box.from(super.count,this.a);
   Box.from(int count, this.a)
       : assert(a > 1000, "a must > 1000"),
+        //初始化列表
         super(count);
 
   Box.from2(this.a) : super.from(fetchData());
@@ -578,6 +579,7 @@ class Box extends AbsContainer {
 
 class MyPoint {
   final double x, y, distanceFromOrigin;
+
   ///使用初始化列表很容易方便对final类型的变量赋值
   MyPoint(double x, double y)
       : x = x,
@@ -590,11 +592,13 @@ class MyPoint {
 //以及这个类实现的其他接口的实例成员,同时该类实现了这个隐式接口
 //如果想创建一个A类支持调用B类的API但是又不想继承(extends)B类，则可以实现(implements)B类的接口(隐式接口)
 
-//ImplicitPerson 相当于相当于实现了ImplicitPerson隐式接口
+//ImplicitPerson 相当于实现了ImplicitPerson隐式接口
 //这个接口包含了greet()方法 以及_name变量
 class ImplicitPerson {
   //在接口中仅对当前library文件可见
   final String _name;
+
+  // String get name => _name;
 
   //构造函数不包含在接口中
   ImplicitPerson(this._name);
@@ -605,10 +609,10 @@ class ImplicitPerson {
 
 class Impostor implements ImplicitPerson, Comparable<Impostor> {
   @override
-  String get _name => "Impostor";
+  String get _name => "";
 
-  @override
-  String greet(String who) => "Hi $who. Do you know who I am?";
+  // @override
+  // String greet(String who) => "Hi $who. Do you know who I am?";
 
   @override
   int compareTo(Impostor other) => _name.compareTo(other._name);

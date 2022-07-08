@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_lesson/dart_lesson/enum/dart_enum%E6%9E%9A%E4%B8%BE.dart';
 
+import 'dart_lesson/dart_类class.dart';
 import 'global.dart';
 
 void main() {
@@ -41,9 +41,9 @@ class _MyHomePageState extends State<MyHomePage> {
           // const DartFunction() // This trailing comma makes auto-formatting nicer for build methods.
           // const DartOperator(),
           // const DartException(),
-          // const DartClasses(),
+          const DartClasses(),
           // const DartExtensions(),
-          const DartEnums(),
+          // const DartEnums(),
     );
   }
 }

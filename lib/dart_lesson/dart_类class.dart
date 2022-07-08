@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_lesson/dart_lesson/dart_%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F.dart';
 import 'package:flutter_lesson/utils/log_utils.dart';
 
 ///Dart面向对象:封装 继承 多态
@@ -89,45 +90,14 @@ class DartClasses extends StatelessWidget {
     assert(!identical(vector2ds, vector2ds2));
     assert(!identical(vector2ds, vector3ds3));
 
-    var immutablePoint = const ImmutablePoint(2.2, 3.3);
-    var immutablePoint2 = const ImmutablePoint(1.1, 9.9);
-    var immutablePoint3 = const ImmutablePoint(2.2, 3.3);
-    var immutablePoint4 = const ImmutablePoint.fromJson(2.2, 3.3);
-    var immutablePoint5 = ImmutablePoint(2.2, 3.3);
-    var immutablePoint6 = ImmutablePoint.fromJson2(2.22);
-    assert(immutablePoint != immutablePoint2);
-    assert(!identical(immutablePoint, immutablePoint2));
-    assert(immutablePoint == immutablePoint3);
-    assert(identical(immutablePoint, immutablePoint3));
-    assert(immutablePoint == immutablePoint4);
-    assert(identical(immutablePoint, immutablePoint4));
-    // assert(immutablePoint == immutablePoint5);
-    // assert(identical(immutablePoint, immutablePoint5));
-    // assert(immutablePoint == immutablePoint6);
-    // assert(identical(immutablePoint, immutablePoint6));
-
-    var immutablePoint7 = const ImmutablePoint(2, 3);
-    var immutablePoint8 = const ImmutablePoint(2, 2);
-    assert(immutablePoint7 + immutablePoint8 == const ImmutablePoint(4, 5));
-    assert(immutablePoint7 - immutablePoint8 == const ImmutablePoint(0, 1));
+    LogUtils.d("const常量构造函数.....");
+    ImmutablePoint.constConstructorTest();
 
     LogUtils.d("factory 工厂构造函数...");
-    var logger = Logger("dev");
-    var logger2 = Logger.fromJson({"name": "dev"});
-    var logger3 = Logger.fromJson({"name": "pro"});
-    assert(logger == logger2);
-    assert(identical(logger, logger2));
-    assert(logger != logger3);
-    assert(!identical(logger, logger3));
+    Logger.testFactoryConstructor();
 
     LogUtils.d("setter/getter方法......");
-    var rectangle = Rectangle(1.1, 2.2, 2.2, 3.3);
-    LogUtils.d(rectangle);
-    //dart中的小数位数问题
-    assert(rectangle.right.toStringAsFixed(1) == "3.3");
-    rectangle.right = 5.5;
-    LogUtils.d(rectangle);
-    assert(rectangle.left == 3.3);
+    Rectangle.testGetterSetter();
 
     LogUtils.d("抽象类abstract........");
     var absContainer = AbsContainer.fromCount(200);
@@ -139,7 +109,6 @@ class DartClasses extends StatelessWidget {
     dynamic impostor = Impostor();
     impostor.a();
     var a = impostor.a;
-
   }
 }
 
@@ -198,7 +167,7 @@ class Person {
         "Person通过私有命名构造函数初始化:$name $sex $age $height\n${data.toString()}");
   }
 
-  //构造函数还可以调用另一个构造函数,通过this关键字调用其他构造函数
+  //构造函数还可以调用另一个构造函数,通过this关键字调用其他构造函数 (重定向redirect构造函数)
   Person.fromName(String name) : this(name, "female", 2.22);
 
   Person.fromNameAndSex(String name, String sex) : this(name, sex, 43.33);
@@ -244,7 +213,6 @@ class Pair<T> {
 
 class ProfileMark {
   //final 非late修饰的变量的赋值通常是通过构造函数来进行初始化的
-
   final String name;
   final DateTime start = DateTime.now();
 
@@ -293,16 +261,16 @@ class People {
 }
 
 class Staff extends People {
-  // Staff.fromJson(Map data) : super.fromJson(data) {
-  //   LogUtils.d("in Staff:$data");
-  // }
+  Staff.fromJson(Map data) : super.fromJson(data) {
+    LogUtils.d("in Staff:$data");
+  }
 
-  Staff.fromJson(super.data) : super.fromJson() {
+  Staff.fromJson2(super.data) : super.fromJson() {
     LogUtils.d("in Staff:");
   }
 
-  Staff(Map data) : super.fromJson(data);
-// Staff(super.data) : super.fromJson();
+  // Staff(Map data) : super.fromJson(data);
+  Staff(super.data) : super.fromJson();
 }
 
 //使用父类构造参数
@@ -330,7 +298,7 @@ class Vector2ds {
 
   Vector2ds(this.x, this.y);
 
-// Vector2ds.named([this.x = 22.2, this.y = 4.3]);
+  Vector2ds.named2([this.x = 22.2, this.y = 4.3]);
 }
 
 class Vector3ds extends Vector2ds {
@@ -357,7 +325,7 @@ class Vector3ds extends Vector2ds {
         assert(x >= 0, "x must be > 0"),
         assert(y <= 0, "y must be < 0");
 
-  //使用初始化列表可以很方便的初始化final变量
+  ///使用初始化列表可以很方便的初始化final变量
   Vector3ds(super.x, super.y) : z = sqrt((x * x) + (y * y));
 
   @override
@@ -371,16 +339,20 @@ class ImmutablePoint {
   static const ImmutablePoint origin = ImmutablePoint(0, 0);
   final double x, y;
 
-  //使用常量构造函数创建编译时常量
   const ImmutablePoint(this.x, this.y);
-
-  // const ImmutablePoint.fromJson(Map<String, double> jsonData)
-  //     : x = jsonData["x"]!,
-  //       y = jsonData["y"]!;  //Invalid constant value.
 
   const ImmutablePoint.fromJson(this.x, this.y);
 
   const ImmutablePoint.fromJson2(this.x, {this.y = 2.2});
+
+  //Invalid constant value.
+  // const ImmutablePoint.fromJson3(Map<String, double> jsonData)
+  //     : x = jsonData["x"]!,
+  //       y = jsonData["y"]!;
+
+  ImmutablePoint.fromJson3(Map<String, double> jsonData)
+      : x = jsonData["x"]!,
+        y = jsonData["y"]!;
 
   //重写操作符
   ImmutablePoint operator +(ImmutablePoint other) =>
@@ -389,12 +361,66 @@ class ImmutablePoint {
   ImmutablePoint operator -(ImmutablePoint other) =>
       ImmutablePoint(x - other.x, y - other.y);
 
-  @override
-  bool operator ==(Object other) =>
-      other is ImmutablePoint && x == other.x && y == other.y;
+  factory ImmutablePoint.mock(double x, double y) {
+    ///const 和 final的区别:
+    ///const是一个常量，在编译的时候就确定了值，因此使用const定义的地方，赋值必须是一个编译期常量
+    ///final的意思是一旦赋值就不能更改了，其是在运行期runtime确定的
 
-  @override
-  int get hashCode => Object.hash(x, y);
+    //使用const常量构造函数创建对象，传递的参数必须是常量,而x,y是变量因此不符合要求
+    // return const ImmutablePoint(x, y);
+    // return const ImmutablePoint(11.1, 22); //使用常量创建
+    return ImmutablePoint(x, y);
+  }
+
+  static void constConstructorTest() {
+    //必须定义了const常量构造函数的，才能够创建const常量对象
+    // var vector2ds4 =const Vector2ds(2.2,3.3);
+    var immutablePoint = const ImmutablePoint(2.2, 3.3);
+    var immutablePoint2 = const ImmutablePoint(1.1, 9.9);
+    var immutablePoint3 = const ImmutablePoint(2.2, 3.3);
+    var immutablePoint4 = const ImmutablePoint.fromJson(2.2, 3.3);
+    var immutablePoint5 = ImmutablePoint(2.2, 3.3); //调用常量构造函数,没有const修饰不是编译期常量
+    var immutablePoint6 = ImmutablePoint.fromJson2(2.22);
+    assert(immutablePoint != immutablePoint2);
+    assert(!identical(immutablePoint, immutablePoint2));
+    //使用常量构造函数创建编译时常量
+    //使用常量构造函数相同参数创建的对象是同一个对象
+    assert(immutablePoint == immutablePoint3);
+    assert(identical(immutablePoint, immutablePoint3));
+    assert(immutablePoint == immutablePoint4);
+    assert(identical(immutablePoint, immutablePoint4));
+    assert(immutablePoint != immutablePoint5);
+    assert(!identical(immutablePoint, immutablePoint5));
+    assert(immutablePoint != immutablePoint6);
+    assert(!identical(immutablePoint, immutablePoint6));
+
+    var immutablePoint7 = const ImmutablePoint(2, 3);
+    var immutablePoint8 = const ImmutablePoint(2, 2);
+    assert(immutablePoint7 + immutablePoint8 != const ImmutablePoint(4, 5));
+    assert(immutablePoint7 - immutablePoint8 != const ImmutablePoint(0, 1));
+
+    //fromJson3不是常量构造函数因此不能使用const进行修饰
+    // var immutablePoint9 = const ImmutablePoint.fromJson3({});
+
+    //在某些场景中可以忽略const关键字
+    // const pointAndLine = const {
+    //   "point": const [const ImmutablePoint(2.2, 3.3)],
+    //   "line":const [const ImmutablePoint(1.1, 4.4),const ImmutablePoint(5.5, 9.9)]
+    // };
+
+    //只需要保留一个常量上下文即可，其余的都可以省略掉
+    const pointAndLine = {
+      "point": [ImmutablePoint(2.2, 3.3)],
+      "line": [ImmutablePoint(1.1, 4.4), ImmutablePoint(5.5, 9.9)]
+    };
+  }
+
+// @override
+// bool operator ==(Object other) =>
+//     other is ImmutablePoint && x == other.x && y == other.y;
+
+// @override
+// int get hashCode => Object.hash(x, y);
 }
 
 //工厂构造函数 factory
@@ -408,8 +434,11 @@ class Logger {
     return _cache.putIfAbsent(name, () => Logger._internal(name));
   }
 
+  ///工厂构造函数使用factory进行修饰
+  ///factory严格意义上并不是构造函数，因为其方法体内不能够访问this,只是为了调用该方法的时候就像调用普通构造函数一样
+  ///而不用关心到底是返回了一个新建的对象还是一个缓存的对象
   factory Logger.fromJson(Map<String, Object> jsonData) {
-    //工厂构造函数中不能访问this
+    ///工厂构造函数中不能访问this
     // this.mute = false;
     return Logger(jsonData["name"].toString());
   }
@@ -421,6 +450,26 @@ class Logger {
       // ignore: avoid_print
       print(msg);
     }
+  }
+
+  static void testFactoryConstructor() {
+    var logger = Logger("dev");
+    var logger2 = Logger.fromJson({"name": "dev"});
+    var logger3 = Logger.fromJson({"name": "pro"});
+    assert(logger == logger2);
+    assert(identical(logger, logger2));
+    assert(logger != logger3);
+    assert(!identical(logger, logger3));
+
+    //factory工厂构造函数实现单例模式
+    // var mySingleton = new MySingleton();
+    var mySingleton = MySingleton();
+    // var mySingleton2 = new MySingleton.fronCount(100);
+    var mySingleton2 = MySingleton.fronCount(100);
+    assert(mySingleton == mySingleton2);
+    assert(identical(mySingleton, mySingleton2));
+    LogUtils.d(mySingleton);
+    LogUtils.d(mySingleton2);
   }
 
   @override
@@ -443,6 +492,16 @@ class Rectangle {
 
   set bottom(double value) => top = value - height;
 
+  static void testGetterSetter() {
+    var rectangle = Rectangle(1.1, 2.2, 2.2, 3.3);
+    LogUtils.d(rectangle);
+    //dart中的小数位数问题
+    assert(rectangle.right.toStringAsFixed(1) == "3.3");
+    rectangle.right = 5.5;
+    LogUtils.d(rectangle);
+    assert(rectangle.left == 3.3);
+  }
+
   @override
   String toString() {
     return 'Rectangle{left: $left, top: $top, width: $width, height: $height, right: $right, bottom: $bottom}';
@@ -458,13 +517,18 @@ abstract class AbsContainer {
   //定义一个抽象变量
   abstract int a;
 
-  //定义了一个抽象方法
+  //定义一个抽象方法
   void updateChildren();
 
   //也可以有具体的方法实现
   void detailAction() {}
 
-  AbsContainer(this.count); //不能够实例化
+  //不能够实例化
+  AbsContainer(this.count) {
+    LogUtils.d("AbsContainer init..... $count");
+  }
+
+  AbsContainer.from(this.count);
 
   //抽象类如果想被实例化，可以通过提供一个工厂构造函数，返回其实现的具体子类
   // factory AbsContainer.fromCount(int count) => AbsContainer(count); //不能够实例化
@@ -477,13 +541,48 @@ abstract class AbsContainer {
 }
 
 class Box extends AbsContainer {
+  //相当于重写了setA/getA 方法
   @override
   int a;
 
-  Box(this.a, super.count) : super();
+  ///Box类的构造函数有三部分组成:
+  ///1.Box(this.a, int count)  子类Box自己的构造函数
+  ///2.assert(count > 500,"count must > 500") 初始化列表
+  ///3.super(count) 调用父类构造函数
+  ///调用顺序为: 1.初始化列表 2.父类构造函数(无参/带参构造函数) 3.子类自己的构造函数
+  ///可以通过一下的assert断言来验证
+  ///初始化列表右边不能使用this关键字，原因是此时对象还没有初始化，根本没有this
+  // Box(this.a, int count) : assert(count > 500,"count must > 500"), super(count){
+  //   LogUtils.d("Box init..... a : $a count : $count");
+  // }
+
+  Box(this.a, super.count) : super() {
+    LogUtils.d("Box init..... a : $a count : $count");
+  }
+
+  ///子类Box调用的是父类构造函数AbsCoutainer()而不是AbsContainer.from()命名构造函数
+  // Box.from(super.count,this.a);
+  Box.from(int count, this.a)
+      : assert(a > 1000, "a must > 1000"),
+        super(count);
+
+  Box.from2(this.a) : super.from(fetchData());
+
+  static int fetchData() {
+    return 10;
+  }
 
   @override
   void updateChildren() {}
+}
+
+class MyPoint {
+  final double x, y, distanceFromOrigin;
+  ///使用初始化列表很容易方便对final类型的变量赋值
+  MyPoint(double x, double y)
+      : x = x,
+        y = y,
+        distanceFromOrigin = sqrt(x * x + y * y);
 }
 
 //隐式接口 implicit interface
@@ -530,5 +629,3 @@ class Impostor implements ImplicitPerson, Comparable<Impostor> {
 }
 
 String greetBob(ImplicitPerson person) => person.greet("Bob");
-
-

@@ -140,34 +140,6 @@ class DartClasses extends StatelessWidget {
     impostor.a();
     var a = impostor.a;
 
-    LogUtils.d("扩展方法Extension methods.......");
-    assert("22".padLeft(3, "*") == "*22");
-    assert(int.parse("22") == 22);
-    assert("22".parseInt() == 22);
-    assert("2.22".parseDouble() == 2.22);
-
-    //Class 'String' has no instance method 'parseInt'.
-    //不能对动态类型的变量调用扩展方法,否则会抛出NoSuchMethodError异常
-    dynamic da = "22";
-    // assert(da.parseInt() == 22);
-    //而对于var类型的变量则是可以调用扩展方法的，因为var类型的变量
-    //在第一次赋值的时候，通过类型推断就可以确定其类型
-    var va = "22";
-    assert(va.parseInt() == 22);
-    var list = <String>[for (int i1 = 0; i1 < 5; i1++) "kobe-$i1"];
-    assert(list.doubleLength == 10);
-    LogUtils.d(-list);
-    LogUtils.d(list.split(3));
-
-    var from =
-        PlanetExtensions.from(<String, Object>{"name": "hoko", "size": 22});
-    // assert(from == const Planet("hoko",22,));
-    // assert(identical(from, const Planet("hoko", 22)));
-    LogUtils.d(from);
-    var tips = "hello worls!";
-    LogUtils.d(tips.scream());
-
-    5.times((p0) => LogUtils.d("5.times -- $p0"));
   }
 }
 
@@ -559,70 +531,4 @@ class Impostor implements ImplicitPerson, Comparable<Impostor> {
 
 String greetBob(ImplicitPerson person) => person.greet("Bob");
 
-//扩展 https://dart.cn/guides/language/extension-methods
-//扩展不仅可以扩展方法,也可以扩展很多的类型，例如：getter/setter/operarator操作符
 
-extension NumberParsing on String {
-  int parseInt() {
-    return int.parse(this);
-  }
-
-  double parseDouble() {
-    return double.parse(this);
-  }
-
-  String scream() => toUpperCase();
-}
-
-extension IntExtension on int {
-  void times(void Function(int) f) {
-    for (int i = 0; i < this; i++) {
-      Function.apply(f, toList());
-    }
-  }
-
-  List<int> toList() => [this];
-
-  List<int> toListWithValue(int value) => [value];
-}
-
-extension ObjectExtension on Object {
-  int nah() => hashCode + 42;
-
-  Type type() => runtimeType;
-
-  bool notAgain(Object other) => this != other;
-}
-
-extension ObjectNorExtension on Object? {
-  String stop(String x) => "${toString()}$x";
-}
-
-//带泛型的扩展
-extension MyCustomList<T> on List<T> {
-  int get doubleLength => length * 2;
-
-  List<T> operator -() => reversed.toList();
-
-  List<List<T>> split(int at) => [sublist(0, at), sublist(at)];
-}
-
-class Planet {
-  final String name;
-  final int size;
-
-  const Planet(this.name, this.size);
-
-  @override
-  String toString() {
-    return 'Planet{name: $name, size: $size}';
-  }
-}
-
-extension PlanetExtensions on Planet {
-  //静态扩展函数
-  static Planet from(Map<String, Object> json) =>
-      Planet(json["name"] as String, json["size"] as int);
-
-  Map<String, Object> toJson() => {"name": name, "size": size};
-}

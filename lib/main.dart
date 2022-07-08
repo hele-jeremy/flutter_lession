@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_lesson/dart_lesson/dart_%E5%BC%82%E5%B8%B8.dart';
-import 'package:flutter_lesson/dart_lesson/dart_%E7%B1%BBclass.dart';
-import 'package:flutter_lesson/dart_lesson/extension/dart_extensions%E6%89%A9%E5%B1%95.dart';
+import 'package:flutter_lesson/dart_lesson/enum/dart_enum%E6%9E%9A%E4%B8%BE.dart';
 
 import 'global.dart';
 
@@ -44,7 +42,8 @@ class _MyHomePageState extends State<MyHomePage> {
           // const DartOperator(),
           // const DartException(),
           // const DartClasses(),
-          const DartExtensions(),
+          // const DartExtensions(),
+          const DartEnums(),
     );
   }
 }

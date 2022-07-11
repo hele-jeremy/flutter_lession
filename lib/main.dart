@@ -42,10 +42,10 @@ class _MyHomePageState extends State<MyHomePage> {
           // const DartFunction() // This trailing comma makes auto-formatting nicer for build methods.
           // const DartOperator(),
           // const DartException(),
-          const DartClasses(),
+          // const DartClasses(),
           // const DartExtensions(),
           // const DartEnums(),
-          // const DartExtensionImplementsMixin(),
+          const DartExtensionImplementsMixin(),
     );
   }
 }

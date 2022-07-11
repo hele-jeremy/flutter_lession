@@ -220,6 +220,12 @@ class Maestro extends Performer with Musical {
     super.entertainMe();
   }
 }
+///MMae extends Object
+///MMae_Musical = MMae with Musical
+///MMae由extends Object 变为了 extends MMae_Musical
+class MMae with Musical{
+// class MMae implements Musical{
+}
 
 void testMixinDefindFieldAndMethod(){
   LogUtils.d("---------------------------------------------");

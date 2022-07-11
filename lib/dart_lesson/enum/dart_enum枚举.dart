@@ -21,7 +21,7 @@ class DartEnums extends StatelessWidget {
   }
 
   void _eunuTest() {
-    //想静态变量一样的访问枚举
+    ///想静态变量一样的访问枚举
     int type;
     var ve = Vehicle.bicycle;
     switch (ve) {
@@ -38,7 +38,7 @@ class DartEnums extends StatelessWidget {
 
     LogUtils.d("type = $type");
 
-    //枚举的遍历
+    ///枚举的遍历
     for (var element in Vehicle.values) {
       LogUtils.d("${element.index} - ${element.name}");
     }
@@ -49,13 +49,13 @@ class DartEnums extends StatelessWidget {
   }
 }
 
-//通过enum来定义一个枚举
+///通过enum来定义一个枚举
 enum Vehicle implements Comparable<Vehicle> {
   car(tires: 4, passengers: 5, carbonPerKilometer: 400),
   bus(tires: 6, passengers: 50, carbonPerKilometer: 800),
   bicycle(tires: 2, passengers: 1, carbonPerKilometer: 0);
 
-  //枚举可以定义成员变量 方法 和常量构造方法(const 修饰)
+  ///枚举可以定义成员变量(只能是final修饰的，包括mixin混入的) 方法 和const常量构造方法(常量构造只能构造出已知数量的常量实例)
   final int tires;
   final int passengers;
   final int carbonPerKilometer;
@@ -84,18 +84,21 @@ enum EnumWithType<T> {
   const EnumWithType(this.items);
 }
 
-//最简单的泛型
+//最简单的枚举
 enum Plain {
   foo,
   bar,
   baz;
 }
 
-//enum枚举可以包含多种构造函数
-enum LogPriority {
+class A{}
+
+///enum枚举可以包含多种构造函数
+///并且枚举不能再继承其他类,并且不能重写== hashCode index这些方法后者getter方法
+enum LogPriority{
   warning(priority: 2, prefix: "warning"),
   error(priority: 1, prefix: "error"),
-  //log只是一个枚举实例的对象的名称，同时其是由unkonwn命名函数生成的
+  ///log只是一个枚举实例的对象的名称，同时其是由unkonwn命名函数生成的
   log.unkonwn(prefix: "Log");
 
   final int priority;
@@ -106,6 +109,9 @@ enum LogPriority {
   //named constructor
   const LogPriority.unkonwn({required String prefix})
       : this(priority: -1, prefix: prefix);
+
+  ///枚举的工厂构造函数只能够返回已知的一个枚举实例
+  // factory LogPriority.formJson() => const LogPriority(priority: 11,prefix: "check");
 
   @override
   String toString() => "$prefix($priority)";

@@ -51,6 +51,7 @@ class DartExtensionImplementsMixin extends StatelessWidget {
 }
 
 ///mixin关键字在dart2.1中才被引入，之前版本中是用abstract class代替
+///mixin的定义语法: metadata? 'mixin' identifier typeParameters? ('on' types)? ('implements' types)? '{' mixinMember* '}'
 mixin Walker {
   void walk() {
     LogUtils.d("$runtimeType - walk");
@@ -125,7 +126,7 @@ void testMultiMixin() {
   assert(ba is B);
 }
 
-//mixin的super超类限定
+///mixin的super超类限定
 abstract class Super {
   void method() {
     ///Super的父类Object没有method()方法
@@ -134,30 +135,59 @@ abstract class Super {
   }
 }
 
-class MySuper implements Super {
+abstract class SuperX {
+  void railWay();
+}
+
+abstract class MySuper implements Super, SuperX {
   @override
   void method() {
     ///MySuper实现了Super类的隐式接口,接口中的method()方法是抽象方法,因此无法通过super.method()进行调用
     // super.method(); //The method 'method' is always abstract in the supertype.
     LogUtils.d("$runtimeType : mySuper method");
   }
+
+  @override
+  void railWay() => LogUtils.d("$runtimeType : mySuper railway");
 }
 
-class AM {}
+class AM {
+  void am() {}
+}
 
 class BM {}
 
 mixin Mx {}
 
-///通过关键字on来指定,哪些类能够使用当前的mixin
-///on Super的意思是指，只有继承Super或者实现Super(隐式接口)的类才能够使用该mixin
-mixin Mixin on Super implements AM, BM {
-// mixin Mixin on Super{
+///通过关键字on来指定,当前的mixin能够应用到哪些类上面
+///on Super,SuperX 的意思是指,只有继承Super&SuperX或者实现Super&SuperX(隐式接口)的类才能够使用(with)该mixin
+///
+/// mixin Mixin on Super, SuperX implements AM, BM 分解可以得到以下等价的几步骤:
+/// mixin Mixin on Super, SuperX implements AM, BM{}
+/// abstract class Mixin$super implements Super, SuperX{}
+/// abstract class Mixin extends Mixin$super implements AM, BM{}
+mixin Mixin on Super, SuperX implements AM, BM {
+  ///mixin类目前不能够定义构造函数
+  // Mixin();  //Mixins can't declare constructors.
+  // factory Mixin.mock() => Client(); //Mixins can't declare constructors.
+
+  int count = 100;
+  bool flag = false;
+  static String name = "Mixin";
+
+  static Client mock() => Client();
+
+  Client actionMock() => Client();
+
+  ///mixin生成的类默认是抽象(abstract)的,因此方法不一定需要实现
   @override
   void method() {
     super.method();
     LogUtils.d("$runtimeType : mixin method");
   }
+
+  @override
+  void railWay() => LogUtils.d("$runtimeType : Mixin railway");
 }
 
 // class Blame with Mixin implements Super  {  //'Mixin' can't be mixed onto 'Object' because 'Object' doesn't implement 'Super'
@@ -166,9 +196,10 @@ class Blame with Mx implements Super {
   void method() {}
 }
 
-///通过mixin的线性(linear)的继承关系，梳理出以下的继承关系图
-/// class MySuper implements Super (MySuper从Super隐式接口中获得了method(只得到了方法名没有得到具体实现))
-/// class MySuper_Mixin = MySuper with Mixin(匿名类MySuper_Mixin继承了MySuper得到了method方法(方法名和具体实现)，同时实现了Mixin隐式接口得到了method方法(名称和具体实现))
+///通过mixin的线性(linear)的继承链(chain)关系，梳理出以下的继承关系图
+/// class MySuper implements Super,SuperX (MySuper从Super&SuperX隐式接口中获得了method&railWay(只得到了方法名没有得到具体实现))
+/// class MySuper_Mixin = MySuper with Mixin(匿名类MySuper_Mixin继承了MySuper得到了method&railWay方法(方法名和具体实现)，
+/// 同时实现了Mixin隐式接口得到了Mixin的成员(member)method&railWay&am方法(名称和具体实现)副本(copied))
 /// class Client exends MySuper_Mixin
 class Client extends MySuper with Mixin {
   @override
@@ -176,11 +207,16 @@ class Client extends MySuper with Mixin {
     LogUtils.d("$runtimeType : client method");
     super.method();
   }
+
+  @override
+  void am() {}
 }
 
 void testMixinConstraint() {
   LogUtils.d("---------------------------------------------");
-  Client().method();
+  Client()
+    ..method()
+    ..railWay();
 
   ///mixin类型是不能直接被实例化的
   // var mixin = Mixin(); //Mixins can't be instantiated.
@@ -220,14 +256,15 @@ class Maestro extends Performer with Musical {
     super.entertainMe();
   }
 }
+
 ///MMae extends Object
 ///MMae_Musical = MMae with Musical
 ///MMae由extends Object 变为了 extends MMae_Musical
-class MMae with Musical{
+class MMae with Musical {
 // class MMae implements Musical{
 }
 
-void testMixinDefindFieldAndMethod(){
+void testMixinDefindFieldAndMethod() {
   LogUtils.d("---------------------------------------------");
   Musician().entertainMe();
   Maestro("Mike").entertainMe();

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_lesson/dart_lesson/dart_%E7%BB%A7%E6%89%BFextensions_%E5%AE%9E%E7%8E%B0implements_%E6%B7%B7%E5%90%88mixin.dart';
+import 'package:flutter_lesson/dart_lesson/asynchrony/dart_%E5%BC%82%E6%AD%A5.dart';
 
-import 'dart_lesson/dart_类class.dart';
 import 'global.dart';
 
 void main() {
@@ -45,7 +44,8 @@ class _MyHomePageState extends State<MyHomePage> {
           // const DartClasses(),
           // const DartExtensions(),
           // const DartEnums(),
-          const DartExtensionImplementsMixin(),
+          // const DartExtensionImplementsMixin(),
+          const DartAsync(),
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_lesson/dart_lesson/asynchrony/dart_%E5%BC%82%E6%AD%A5.dart';
-
+import 'package:flutter_lesson/dart_lesson/asynchrony/data_%E5%BC%82%E6%AD%A5stream.dart';
 import 'global.dart';
 
 void main() {
@@ -35,17 +34,17 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
-      body:
-          // const DartBuiltInTypes() // This trailing comma makes auto-formatting nicer for build methods.
-          // const DartFunction() // This trailing comma makes auto-formatting nicer for build methods.
-          // const DartOperator(),
-          // const DartException(),
-          // const DartClasses(),
-          // const DartExtensions(),
-          // const DartEnums(),
-          // const DartExtensionImplementsMixin(),
-          const DartAsync(),
-    );
+        appBar: AppBar(title: Text(widget.title)),
+        body:
+            // const DartBuiltInTypes() // This trailing comma makes auto-formatting nicer for build methods.
+            // const DartFunction() // This trailing comma makes auto-formatting nicer for build methods.
+            // const DartOperator(),
+            // const DartException(),
+            // const DartClasses(),
+            // const DartExtensions(),
+            // const DartEnums(),
+            // const DartExtensionImplementsMixin(),
+            // const DartAsync(),
+            const DartStream());
   }
 }

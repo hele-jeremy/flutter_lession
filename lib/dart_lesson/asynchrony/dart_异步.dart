@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_lesson/dart_lesson/dart_%E5%BC%82%E5%B8%B8.dart';
 import 'package:flutter_lesson/utils/log_utils.dart';
 
 ///Dart中的异步支持
@@ -27,7 +28,12 @@ class DartAsync extends StatelessWidget {
     // _test2();
     // _test3();
     // _test4();
-    _test5();
+    // _test5();
+    // _test6();
+    // _test7();
+    // _test8();
+    // _test9();
+    _test10();
   }
 }
 
@@ -159,6 +165,7 @@ Future<String> one() {
 Future<String> two() {
   LogUtils.d("two excute...!");
   return Future.error("error from two");
+  // return Future.value(throw Exception("error from two"));
 }
 
 Future<String> three() {
@@ -172,6 +179,7 @@ Future<String> four() {
 }
 
 void _test5() {
+  LogUtils.d("five future error handling.............................");
   one() //以一个值完成(completed a value)
       .then((_) => two()) //以一个错误完成(complete a error)
       .then((_) => three()) //以two的error完成(completed a error form two)
@@ -182,4 +190,181 @@ void _test5() {
     ///重新以42完成(Future completed with a value)
     return 42;
   }).then((value) => LogUtils.d("The value is $value"));
+}
+
+///Future处理特定类型的异常
+class AuthNameIlleagalException implements Exception {}
+
+class AgeArgumentError extends Error {}
+
+var _testCount = 0;
+
+Future<Map<String, Object>> handleAuthResponse(Map<String, Object> authData) {
+  ///在handleAuthResponse方法内部，不是通过Future抛出的异常，是不会被下游Future的catchError给捕获到的
+  // throw AuthNameIlleagalException();
+  // throw AgeArgumentError();
+  // return Future.delayed(const Duration(seconds: 2), () => authData);
+  var ret = ++_testCount % 3;
+  return Future.delayed(const Duration(seconds: 1), () {
+    if (ret == 0) {
+      throw AuthNameIlleagalException();
+    } else if (ret == 1) {
+      throw AgeArgumentError();
+    } else {
+      throw TestIllegalArgumentException();
+    }
+  });
+}
+
+void _test6() {
+  LogUtils.d("six Future handle spcific error..................");
+  handleAuthResponse(const {"userName": "hoko", "age": 3})
+      .then((value) => value)
+      .catchError((err, stackTrace) {
+    LogUtils.d("handle auth error: $err");
+
+    /// catchError在onError中捕获异常了以后，同时需要返回一个和上游Future类型一样的Future,否则在运行时会抛出一个异常
+    return <String, Object>{};
+
+    ///通过test来指定catchError处理指定类型的异常
+  }, test: (err) => err is AuthNameIlleagalException).catchError(
+          (err, stackTrace) {
+    LogUtils.d("handle age error : $err");
+    return <String, Object>{};
+  }, test: (err) => err is AgeArgumentError).catchError((err, stackTrace) {
+    LogUtils.d("handle other common error: $err");
+    return <String, Object>{};
+  })
+
+      ///无论上游的Future是成功还是失败，whenCompleted都会执行
+      ///可以在里面执行释放，资源回收等一定需要执行的操作
+      .whenComplete(() => LogUtils.d("handle auth response completed"));
+}
+
+///whenCompleted的错误处理
+void _test7() {
+  two()
+      .then((value) => LogUtils.d("two then value : $value"))
+
+      ///whenCompleted的Future以two()的error完成(complete wieh a error)，同时会回调whenCompleted注册的回调(这个和then不同,then不会回调注册的callback)
+      .whenComplete(() => LogUtils.d("two then whenCompletd....."))
+      .then(
+          (value) => LogUtils.d("two then whenCompleted then value ....void}"))
+      .catchError((err, stackTrace) {
+    LogUtils.d("test7 handle error : $err");
+  });
+
+  LogUtils.d("------------------------------------------");
+  two()
+      .then((value) => LogUtils.d("************two then value $value"))
+      .catchError((err, stackTrace) {
+    LogUtils.d("************two then catchError handle error $err");
+    // ignore: invalid_return_type_for_catch_error
+    return "catchError complete with a new value";
+
+    ///whenCompleted是以catchError的Future(complete with a value)来完成的
+    // ignore: void_checks
+  }).whenComplete(() {
+    LogUtils.d("************two then catchError whenCompleted....");
+    throw Exception("new exception from whenCompelted...");
+  }).catchError((err, stackTrace) {
+    LogUtils.d("************catch error from whenCompelted:$err");
+  });
+}
+
+///future的错误处理方式
+void _test8() {
+  ///在接收到Future消息后500毫秒才附加错误处理程序。如果future在此之前失败，
+  ///则将错误转发给全局错误处理程序（global error-handler），即使有最终处理错误(catchError)的代码(就在下面)。
+  var futureTwo = two();
+
+  Future.delayed(const Duration(milliseconds: 500), () {
+    ///先调用two()方法生成一个Future对象,然后再去使用catchError进行错误的处理
+    ///错误是不会被catchError捕获的,而是应该在Future.delayed里面进行错误的捕获(future的错误处理越早越好)
+    futureTwo
+        // two()
+        .then((value) => LogUtils.d("futureTwo then..."))
+        .catchError((err, stackTrace) {
+      LogUtils.d("futureTwo catchError....$err");
+    });
+  });
+
+  Timer(const Duration(milliseconds: 5), () {
+    LogUtils.d("timer excuted....");
+  });
+}
+
+///Future的同步和异步错误处理
+
+String obtainFileName(Map<String, dynamic> data) {
+  throw Exception("error from obtain file name....");
+  // return data["fileName"];
+}
+
+Future<String> obtainFileNameSuffix(String name, String suffix) {
+  return Future.delayed(
+      const Duration(microseconds: 100), () => "$name.$suffix");
+}
+
+int parseFileData(String content) {
+  throw Exception("parse file data error....");
+  return content.length;
+}
+
+Future<int> parseAndRead(Map<String, dynamic> data) {
+  ///obtainFileName方法抛出的异常，由于其没有注册catchError错误处理回调(其返回值是一个String)
+  ///因此当其出现异常的时候,会同步的抛出一个异常，并且这个异常是不会被parseAndRead方法的Future的
+  ///catchError给捕获的
+  final fileName = obtainFileName(data);
+
+  return obtainFileNameSuffix(fileName, ".jpg").then((value) {
+    ///虽然parseFileData方法也会抛出异常，但是它的异常不会泄漏(leak)到外部，而是会被then的Future返回的错误
+    ///来完成(completed with an error)同理parseAndRead方法的catchError会捕获到该error(completed with an error)
+    return parseFileData(value);
+  });
+}
+
+Future<int> parseAndRead2(Map<String, dynamic> data) {
+  ///确保函数不会意外抛出同步(sync)错误的常见模式是将函数体包装在新的 Future.sync() 回调中
+  return Future.sync(() {
+    var fileName = obtainFileName(data);
+    return obtainFileNameSuffix(fileName, ".png").then((value) {
+      return parseFileData(value);
+    });
+  });
+}
+
+void _test9() {
+  ///外部的parseAndRead方法为了捕获抛出的同步异常,必须使用try..catch来捕获异常
+  try {
+    parseAndRead(const {"fileName": "hello"}).catchError((err, stackTrace) {
+      LogUtils.d("inside catch error....$err!");
+      return -1;
+    }).whenComplete(() => LogUtils.d("parseAndRead completed....!"));
+  } catch (err) {
+    LogUtils.d("parseAndRead handle error outside : $err");
+  }
+
+  LogUtils.d("-----------------------------------------");
+  parseAndRead2(const {"fileName": "flutter first"})
+
+      ///可以处理parseAndRead2里面的所有的异常
+      ///Future.sync() 不仅允许您处理您知道可能发生的错误，还可以防止错误意外泄漏到您的函数中(简单理解类似给Future加了一个try..catch..)
+      .catchError((err, stackTrace) {
+    LogUtils.d("parseAndRead2 handle error : $err");
+    return 22;
+  }).whenComplete(() => LogUtils.d("parseAndRead2 completed....."));
+}
+
+///多个Future结果的等待
+
+void _test10() {
+  num ret = 0;
+  Future.wait([
+    Future.delayed(const Duration(seconds: 2), () {
+      LogUtils.d("future 1....");
+      return 100;
+    }),
+    Future.value(200)
+  ]).then((value) => LogUtils.d("Future.wait result : $value"));
 }

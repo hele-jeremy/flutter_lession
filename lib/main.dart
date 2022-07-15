@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_lesson/dart_lesson/asynchrony/data_%E5%BC%82%E6%AD%A5stream.dart';
+
+import 'dart_lesson/asynchrony/data_异步stream_生成器.dart';
 import 'global.dart';
 
 void main() {

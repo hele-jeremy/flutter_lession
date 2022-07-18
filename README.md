@@ -27,9 +27,12 @@ Future和错误处理：https://dart.cn/guides/libraries/futures-error-handling
 dart 异步async api文档:https://api.dart.cn/stable/2.17.6/dart-async/dart-async-library.html
 Stream介绍：https://api.dart.cn/stable/2.17.6/dart-async/dart-async-library.html
 Steram的使用:https://dart.cn/articles/libraries/creating-streams
-
+dart并发：https://dart.cn/guides/language/concurrency
 isolate Event Loop Event queue:https://web.archive.org/web/20181011034350/https://webdev.dartlang.org/articles/performance/event-loop#microtask-queue-schedulemicrotask
 
 https://medium.com/dartlang/dart-asynchronous-programming-isolates-and-event-loops-bffc3e296a6a
+
+flutter分享:
+https://mp.weixin.qq.com/s/tSJ9e6byBlQ5zTHRILHvRQ
 
 

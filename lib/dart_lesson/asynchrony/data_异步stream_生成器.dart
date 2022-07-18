@@ -37,7 +37,10 @@ class DartStream extends StatelessWidget {
     // _test5();
     // _test6();
     // _test7();
-    _test8();
+    // _test8();
+    // _testEventLoop1();
+
+    _testEventLoop2();
   }
 
   ///通过生成器生成一个Stream流(类似于一个异步的可迭代的Iterator),使用  async* 配合 yield
@@ -303,6 +306,7 @@ class DartStream extends StatelessWidget {
 
     void tick(Timer timer) {
       count++;
+      // controller.sink.add(count);
       controller.add(count);
       if (maxCount != null && count == maxCount) {
         timer.cancel();
@@ -331,7 +335,6 @@ class DartStream extends StatelessWidget {
     var streamCounter = _timedCounter(const Duration(seconds: 1), 10);
     late StreamSubscription<int> streamSubscription;
 
-
     streamSubscription = streamCounter.listen((event) {
       LogUtils.d("streamCounter : $event");
 
@@ -339,9 +342,81 @@ class DartStream extends StatelessWidget {
         streamSubscription.pause(Future.delayed(const Duration(seconds: 5)));
       }
     }, onDone: () => LogUtils.d("streanCounter done!"));
-
   }
 
+  ///isolate隔离区
+  ///https://web.archive.org/web/20181011034350/https://webdev.dartlang.org/articles/performance/event-loop#microtask-queue-schedulemicrotask
+  ///Dart 应用程序有一个带有两个队列的事件循环——事件队列和微任务队列。
+  ///Dart 应用程序在其主隔离(main isolate)执行应用程序的 main() 函数时开始执行。
+  /// main() 退出后，主隔离线程(main isolate)开始处理应用程序事件队列(event queue)中的任何项目，一项一项。
+  /// Dart中的隔离区(isolate)中的事件队列(event queue,microtask queue)的事件循环机制(Event Loop)
+  void _testEventLoop1() {
+    // ignore: avoid_print
+    print("main -- #1");
 
+    scheduleMicrotask(() {
+      // ignore: avoid_print
+      print("micro task -- #1");
+    });
 
+    // ignore: avoid_print
+    Future.delayed(
+        const Duration(seconds: 1), () => print('future delayed task -- #!'));
+
+    // ignore: avoid_print
+    Future(() => print("future task -- #1!"));
+
+    // ignore: avoid_print
+    Future(() => print("future task -- @2!"));
+
+    scheduleMicrotask(() {
+      // ignore: avoid_print
+      print("micro task -- #2!");
+    });
+
+    // ignore: avoid_print
+    print("mian -- #2");
+  }
+
+  ///在一个方法中使用事件队列(microtask queue,event queue)执行事件循环(event loop),
+  /// 都是要在这个方法执行完毕后,才开始执行执行事件循环机制
+  /// 也就是优先级为: 当前执行的方法 -> microtask queue -> event queue
+  void _testEventLoop2() {
+    print('main #1 of 2');
+    scheduleMicrotask(() => print('microtask #1 of 3'));
+
+    new Future.delayed(
+        new Duration(seconds: 1), () => print('future #1 (delayed)'));
+
+    new Future(() => print('future #2 of 4'))
+        .then((_) => print('future #2a'))
+        .then((_) {
+      print('future #2b');
+
+      ///添加一个事件到微任务队列，执行完当前的Future(#2)后，在下一次事件循环（event queue）之前会先去处理微任务队列中的事件
+      scheduleMicrotask(() => print('microtask #0 (from future #2b)'));
+    }).then((_) => print('future #2c'));
+
+    scheduleMicrotask(() => print('microtask #2 of 3'));
+
+    new Future(() => print('future #3 of 4'))
+
+        ///注意:当前的then是返回的一个新的future，因此相当于是往任务队列（event queue)队尾追加了一个事件,因此其是比Future(#4)后被处理的
+        .then((_) => new Future(() => print('future #3a (a new future)')))  //
+       /* .then((_) {
+      return new Future(() => print('future #3a (a new future)'));
+    })*//*.then((_) {
+      new Future(() => print('future #3a (a new future)'));
+    })*/
+
+        ///(_) => new Future(...) 和 (_){new Future(...);} 和 (_){return new Future(...);}三者的区别
+       ///以上三者都会新创建一个Future对象，相当于都会向事件队列(event queue)队尾添加一个待处理的event事件
+        ///() => new Future(...) 和 (){return new Future(...);} 会将接下来的链式(chain)调用上的then整合到一起
+        ///(){new Future(...);} 不会整合之前Future在其后面的then的调用
+        .then((_) => print('future #3b'));
+
+    new Future(() => print('future #4 of 4'));
+    scheduleMicrotask(() => print('microtask #3 of 3'));
+    print('main #2 of 2');
+  }
 }

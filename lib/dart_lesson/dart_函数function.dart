@@ -12,7 +12,17 @@ class DartFunction extends StatelessWidget {
             onPressed: _funcTest,
             child:
                 Text("Dart中的函数", style: Theme.of(context).textTheme.headline6))
-      ])
+      ]),
+      Container(
+          margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            MaterialButton(
+                onPressed: _typeDefTest,
+                child: Text(
+                  "类型别名typedef",
+                  style: Theme.of(context).textTheme.headline6,
+                ))
+          ]))
     ]);
   }
 
@@ -62,6 +72,8 @@ class DartFunction extends StatelessWidget {
 
     LogUtils.d("----函数返回值-----");
     functionTest.funcRetrunValueTest();
+
+    LogUtils.d("----类型别名typedef-----");
   }
 }
 
@@ -351,4 +363,58 @@ class FunctionEqualsTest {
   static void sFunc() {}
 
   void func() {}
+}
+
+///类型别名typedef:类型别名是引用某一类型的简便方法，因为其使用关键字 typedef，因此通常被称作 typedef。
+typedef IntList = List<int>; //定义一个类型为List<int>的类型
+typedef ListMapper<X> = Map<X, List<X>>; //typedef也可以有泛型的类型参数
+typedef Compare<T> = int Function(T a, T b); //typedef表示函数的类型
+
+int _sort(int a, int b) => a - b;
+
+void _typeDefTest() {
+  IntList i1 = [for (int i = 0; i < 5; i++) i * i];
+  LogUtils.d("i1 = $i1");
+  assert(i1 is List<int>);
+
+  ListMapper<String> m1 = {
+    for (int i2 = 0; i2 < 5; i2++) "key-$i2": ["list-item-$i2"]
+  };
+  LogUtils.d("m1:\n$m1");
+  assert(m1 is Map<String, List<String>>);
+
+  assert(_sort is Compare<int>);
+}
+
+class _Event {}
+
+///在一般情况下，我们 优先使用内联函数类型，而后是 typedef
+///如果函数类型特别长或经常使用，那么还是有必要使用 typedef 进行定义。
+///但在大多数情况下，使用者更希望知道函数使用时的真实类型，这样函数类型语法使它们清晰。
+class FilteredObservable {
+  final bool Function(_Event) _predicate;  //定义了一个函数类型 返回值为bool 接受参数为_Event
+  final List<void Function(_Event)> _observers; //定义了一个List类型，定义元素泛型为函数类型:返回值为void 接受参数为_Event
+
+  FilteredObservable(this._predicate, this._observers);
+
+  //定义一个函数notify，返回值为函数类型(nullable)其返回值为void,接收一个_Event类型的参数
+  void Function(_Event)? notify(_Event event) {
+    if (!_predicate(event)) return null;
+
+    void Function(_Event)? last;
+    for (final observer in _observers) {
+      observer(event);
+      last = observer;
+    }
+
+    return last;
+  }
+
+  //定义函数参数也可以使用,Function同时可以使用泛型
+  Iterable<T> where<T>(bool Function(T) predicate,T value){
+    if (predicate(value)) {
+      return [value];
+    }
+    return [];
+  }
 }

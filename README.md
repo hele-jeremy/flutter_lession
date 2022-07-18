@@ -35,4 +35,9 @@ https://medium.com/dartlang/dart-asynchronous-programming-isolates-and-event-loo
 flutter分享:
 https://mp.weixin.qq.com/s/tSJ9e6byBlQ5zTHRILHvRQ
 
+flutter电子书教程:
+https://book.flutterchina.club
+https://guoshuyu.cn/home/wx/
+
+
 

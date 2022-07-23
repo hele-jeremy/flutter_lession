@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'dart_lesson/asynchrony/dart_异步_future_async_await.dart';
 import 'dart_lesson/asynchrony/data_异步stream_生成器.dart';
 import 'dart_lesson/dart_函数function.dart';
 import 'global.dart';
@@ -38,16 +39,16 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
         appBar: AppBar(title: Text(widget.title)),
         body:
-            // const DartBuiltInTypes() // This trailing comma makes auto-formatting nicer for build methods.
-            const DartFunction() // This trailing comma makes auto-formatting nicer for build methods.
-            // const DartOperator(),
-            // const DartException(),
-            // const DartClasses(),
-            // const DartExtensions(),
-            // const DartEnums(),
-            // const DartExtensionImplementsMixin(),
-            // const DartAsync(),
-            // const DartStream(),
+      // const DartBuiltInTypes()
+      // const DartFunction()
+      // const DartOperator(),
+      // const DartException(),
+      // const DartClasses(),
+      // const DartExtensions(),
+      // const DartEnums(),
+      // const DartExtensionImplementsMixin(),
+      const DartAsync(),
+      // const DartStream(),
     );
   }
 }

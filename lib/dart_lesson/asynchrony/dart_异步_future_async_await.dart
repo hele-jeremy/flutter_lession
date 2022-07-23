@@ -33,7 +33,9 @@ class DartAsync extends StatelessWidget {
     // _test7();
     // _test8();
     // _test9();
-    _test10();
+    // _test10();
+    // _test11();
+    _test12();
   }
 }
 
@@ -367,4 +369,90 @@ void _test10() {
     }),
     Future.value(200)
   ]).then((value) => LogUtils.d("Future.wait result : $value"));
+}
+
+//Dart中Future的回调地狱(callback hell)消除
+
+class HellUser {
+  final String userName;
+  final String phone;
+
+  HellUser({required this.userName, required this.phone});
+
+  HellUser.from(Map<String, String> data)
+      : this(userName: data["name"]!, phone: data["phone"]!);
+
+  @override
+  String toString() {
+    return 'HellUser{userName: $userName, phone: $phone}';
+  }
+}
+
+Future<String> login(String userName, String pwd) {
+  return Future.delayed(const Duration(seconds: 1), () {
+    LogUtils.d("user:$userName : $pwd login...!");
+    return "1000010001";
+  });
+}
+
+Future<Map<String, String>> fetchUserInfo(String userId) {
+  return Future.delayed(const Duration(seconds: 2), () {
+    LogUtils.d("fetchUserInfo by id:$userId");
+    return <String, String>{"name": "hoko", "phone": "13528459546"};
+  });
+}
+
+Future<void> saveUserInfoToLocal(HellUser user) {
+  return Future(() {
+    LogUtils.d("save helluser to local:$user");
+  });
+}
+
+void _test11() {
+  //回调地狱的调用方式
+  // login("hoko", "3213")
+  //     .then((userId) {
+  //       fetchUserInfo(userId)
+  //           .then((userInfo) {
+  //             saveUserInfoToLocal(HellUser.from(userInfo))
+  //                 .then((value) => LogUtils.d("saveUserInfo success...!"))
+  //                 .then((value) => LogUtils.d("then..........C"))
+  //                 .catchError(
+  //                     (err, stackTrace) => LogUtils.d("saveUserInfo faile...!"))
+  //                 .whenComplete(() => LogUtils.d("saveUserInfo done!"));
+  //           })
+  //           .then((value) => LogUtils.d("then ......... A"))
+  //           .whenComplete(() => LogUtils.d("completed ....... A"));
+  //     })
+  //     .then((value) => LogUtils.d("then ........."))
+  //     .whenComplete(() => LogUtils.d("completed ..........."));
+
+  LogUtils.d("---------------------------------------------");
+  //使用Future所有方法api都是返回一个Future的特点来解决回调地狱
+  login("hoko", "3213")
+      .then((userId) {
+        ///在then中返回了一个Future,相当于把这个Future任务添加进了微任务(microTask queue)优先级最高
+        return fetchUserInfo(userId)
+            .then((userInfo) {
+              return saveUserInfoToLocal(HellUser.from(userInfo))
+                  .then((value) => LogUtils.d("saveUserInfo success...!"))
+                  .then((value) => LogUtils.d("then..........C"))
+                  .catchError(
+                      (err, stackTrace) => LogUtils.d("saveUserInfo faile...!"))
+                  .whenComplete(() => LogUtils.d("saveUserInfo done!"));
+            })
+            .then((value) => LogUtils.d("then ......... A"))
+            .whenComplete(() => LogUtils.d("completed ....... A"));
+      })
+      .then((value) => LogUtils.d("then ........."))
+      .whenComplete(() => LogUtils.d("completed ..........."));
+}
+
+//通过使用async / await的方式来解决回调地狱(callback hell)的问题
+Future<void> _test12() async {
+  LogUtils.d("save userInfo begin...!");
+  var userId = await login("lebron", "f32424224");
+  var userInfo = await fetchUserInfo(userId);
+  await saveUserInfoToLocal(HellUser.from(userInfo));
+  LogUtils.d("save userInfo done...!");
 }

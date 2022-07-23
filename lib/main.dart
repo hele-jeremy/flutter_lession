@@ -5,10 +5,10 @@ import 'dart_lesson/asynchrony/data_异步stream_生成器.dart';
 import 'dart_lesson/dart_函数function.dart';
 import 'global.dart';
 
-void main() {
-  Global.init();
-  runApp(const MyApp());
-}
+// void main() {
+//   Global.init();
+//   runApp(const MyApp());
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

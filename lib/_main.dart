@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_lesson/flutter_lession/context_test.dart';
+import 'package:flutter_lesson/flutter_lession/echo.dart';
+
+import 'flutter_lession/state生命周期.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,18 +18,21 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Lession',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.
+          primarySwatch: Colors.green),
+      // home: const MyHomePage(title: '重新学习Flutter'),
+      // home: const ContextRoute(),
+      home: const CounterStateWidget(
+        initValue: 10,
       ),
-      home: const MyHomePage(title: '重新学习Flutter'),
     );
   }
 }
@@ -103,6 +110,11 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
+            const Echo(
+              text: "文字回显widget",
+              backgroundColors: Colors.yellow,
+            ),
+            const ContextRoute()
           ],
         ),
       ),

@@ -3,8 +3,10 @@ import 'package:flutter_lesson/flutter_lession/context_test.dart';
 import 'package:flutter_lesson/flutter_lession/echo.dart';
 
 import 'flutter_lession/state生命周期.dart';
+import 'global.dart';
 
 void main() {
+  Global.init();
   runApp(const MyApp());
 }
 

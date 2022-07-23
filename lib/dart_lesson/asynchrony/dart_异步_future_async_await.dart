@@ -450,9 +450,13 @@ void _test11() {
 
 //通过使用async / await的方式来解决回调地狱(callback hell)的问题
 Future<void> _test12() async {
-  LogUtils.d("save userInfo begin...!");
-  var userId = await login("lebron", "f32424224");
-  var userInfo = await fetchUserInfo(userId);
-  await saveUserInfoToLocal(HellUser.from(userInfo));
-  LogUtils.d("save userInfo done...!");
+  try {
+    LogUtils.d("save userInfo begin...!");
+    var userId = await login("lebron", "f32424224");
+    var userInfo = await fetchUserInfo(userId);
+    await saveUserInfoToLocal(HellUser.from(userInfo));
+    LogUtils.d("save userInfo done...!");
+  } catch (err, stackTrace) {
+    LogUtils.d("save userInfo error...!");
+  }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_lesson/flutter_lession/context_test.dart';
-import 'package:flutter_lesson/flutter_lession/echo.dart';
+import 'package:flutter_lesson/flutter_lession/buildcontext上下文测试.dart';
+import 'package:flutter_lesson/flutter_lession/widget%E6%A0%91%E4%B8%AD%E8%8E%B7%E5%8F%96State%E5%AF%B9%E8%B1%A1.dart';
 
 import 'flutter_lession/state生命周期.dart';
 import 'global.dart';
@@ -32,9 +32,8 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.green),
       // home: const MyHomePage(title: '重新学习Flutter'),
       // home: const ContextRoute(),
-      home: const CounterStateWidget(
-        initValue: 10,
-      ),
+      // home: const StateLifecycleTestWidget(),
+      home: const GetStateObjectRoute(),
     );
   }
 }
@@ -111,10 +110,6 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
-            ),
-            const Echo(
-              text: "文字回显widget",
-              backgroundColors: Colors.yellow,
             ),
             const ContextRoute()
           ],

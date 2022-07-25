@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_lesson/flutter_lession/buildcontext上下文测试.dart';
+import 'package:flutter_lesson/flutter_lession/flutter%E4%B8%AD%E7%9A%84state%E7%8A%B6%E6%80%81%E7%9A%84%E7%AE%A1%E7%90%86.dart';
 import 'package:flutter_lesson/flutter_lession/widget%E6%A0%91%E4%B8%AD%E8%8E%B7%E5%8F%96State%E5%AF%B9%E8%B1%A1.dart';
 
 import 'flutter_lession/state生命周期.dart';
@@ -33,7 +34,8 @@ class MyApp extends StatelessWidget {
       // home: const MyHomePage(title: '重新学习Flutter'),
       // home: const ContextRoute(),
       // home: const StateLifecycleTestWidget(),
-      home: const GetStateObjectRoute(),
+      // home: const GetStateObjectRoute(),
+      home: const WidgetStateManageRoute(),
     );
   }
 }

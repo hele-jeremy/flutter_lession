@@ -23,15 +23,16 @@ class _RoutePage1State extends State<RoutePage1> {
     // LogUtils.d("_RoutePage1State initState args:$arguments");
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   var arguments = ModalRoute.of(context)?.settings.arguments;
-  //   LogUtils.d("_RoutePage1State didChangeDependencies args:$arguments");
-  // }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    var arguments = ModalRoute.of(context)?.settings.arguments;
+    LogUtils.d("_RoutePage1State didChangeDependencies args:$arguments");
+  }
 
   @override
   Widget build(BuildContext context) {
+    ///通过ModalRoute的方式在页面之间传递参数的方式，比通过构造函数传递参数的方式要灵活
     var arguments = ModalRoute.of(context)?.settings.arguments;
     LogUtils.d("_RoutePage1State build args:$arguments");
     return Scaffold(

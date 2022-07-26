@@ -10,9 +10,12 @@ import 'package:flutter_lesson/dart_lesson/dart_%E8%BF%90%E7%AE%97%E7%AC%A6_%E6%
 import 'package:flutter_lesson/dart_lesson/dart_basic.dart';
 import 'package:flutter_lesson/dart_lesson/enum/dart_enum%E6%9E%9A%E4%B8%BE.dart';
 import 'package:flutter_lesson/dart_lesson/extension/dart_extensions%E6%89%A9%E5%B1%95.dart';
+import 'package:flutter_lesson/flutter_lession/route%E8%B7%AF%E7%94%B1%E7%AE%A1%E7%90%86/login_page.dart';
+import 'package:flutter_lesson/flutter_lession/route%E8%B7%AF%E7%94%B1%E7%AE%A1%E7%90%86/mine_page.dart';
 import 'package:flutter_lesson/flutter_lession/route%E8%B7%AF%E7%94%B1%E7%AE%A1%E7%90%86/page_args.dart';
 import 'package:flutter_lesson/flutter_lession/route%E8%B7%AF%E7%94%B1%E7%AE%A1%E7%90%86/route_page_1.dart';
 import 'package:flutter_lesson/flutter_lession/widget%E6%A0%91%E4%B8%AD%E8%8E%B7%E5%8F%96State%E5%AF%B9%E8%B1%A1.dart';
+import 'package:flutter_lesson/utils/log_utils.dart';
 
 import '../../_main.dart';
 import '../flutter中的state状态的管理.dart';
@@ -35,26 +38,63 @@ const String routeTest = "route_test";
 const String widgetStateLifecycleTest = "widget_state_lifecycle_test";
 const String widgetStateManageTest = "widget_state_manage_test";
 const String widgetStateObjectGetTest = "widget_state_object_get_test";
+////////
+const String minePageRoute = "mine_page_route";
 
-Map<String, WidgetBuilder> routeTableGenerator() => {
-      initRoute: (context) => const MyHomePage(title: "重新学习Flutter"),
-      dartBasic: (context) => const DartBasicIntroductionWidget(),
-      dartBuiltInType: (context) => const DartBuiltInTypes(),
-      dartFunction: (context) => const DartFunction(),
-      dartOperatorAndFlowControll: (context) => const DartOperator(),
-      dartOOPClass: (context) => const DartClasses(),
-      dartExtendsImplementsMixin: (context) =>
-          const DartExtensionImplementsMixin(),
-      dartException: (context) => const DartException(),
-      dartExtension: (context) => const DartExtensions(),
-      dartEnum: (context) => const DartEnums(),
-      dartFutureAsyncAwait: (context) => const DartAsyncAwaitFuture(),
-      dartStream: (context) => const DartStream(),
-      routeTest: (context) => const RouteTestWidget(),
-      RoutePage1.routeName: (context) => RoutePage1(
-          args: (ModalRoute.of(context)?.settings.arguments ??
-              PageArgs(id: "000000000", action: 0)) as PageArgs),
-      widgetStateLifecycleTest: (context) => const StateLifecycleTestRoute(),
-      widgetStateManageTest: (context) => const WidgetStateManageRoute(),
-      widgetStateObjectGetTest: (context) => const GetStateObjectRoute(),
-    };
+///暂时先用静态变量记录当前的登录状态
+var hasLogin = false;
+
+///定义路由表
+Map<String, WidgetBuilder> routeTables = {
+  initRoute: (context) => const MyHomePage(title: "重新学习Flutter"),
+  dartBasic: (context) => const DartBasicIntroductionWidget(),
+  dartBuiltInType: (context) => const DartBuiltInTypes(),
+  dartFunction: (context) => const DartFunction(),
+  dartOperatorAndFlowControll: (context) => const DartOperator(),
+  dartOOPClass: (context) => const DartClasses(),
+  dartExtendsImplementsMixin: (context) => const DartExtensionImplementsMixin(),
+  dartException: (context) => const DartException(),
+  dartExtension: (context) => const DartExtensions(),
+  dartEnum: (context) => const DartEnums(),
+  dartFutureAsyncAwait: (context) => const DartAsyncAwaitFuture(),
+  dartStream: (context) => const DartStream(),
+  routeTest: (context) => const RouteTestWidget(),
+
+  ///如果没有传递参数，通过构造传递一个默认的参数
+  RoutePage1.routeName: (context) => RoutePage1(
+      args: (ModalRoute.of(context)?.settings.arguments ??
+          PageArgs(id: "000000000", action: 0)) as PageArgs),
+  widgetStateLifecycleTest: (context) => const StateLifecycleTestRoute(),
+  widgetStateManageTest: (context) => const WidgetStateManageRoute(),
+  widgetStateObjectGetTest: (context) => const GetStateObjectRoute(),
+  //////
+  minePageRoute: (context) => const MinePageWidget(),
+};
+
+Map<String, WidgetBuilder> routeTableGenerator() => routeTables;
+
+///路由生成钩子
+Route<dynamic>? onGenerateRoute(RouteSettings settings) {
+  LogUtils.d("onGenerateRoute:{${settings.name} : ${settings.arguments}");
+
+  if (!hasLogin && checkNeedLoginPermission(settings.name)) {
+    return buildJumpToLoginPageRoute(
+        name: settings.name, arguments: settings.arguments);
+  }
+
+  return MaterialPageRoute(builder: routeTables[settings.name]!);
+}
+
+Route buildJumpToLoginPageRoute({String? name, Object? arguments}) {
+  return MaterialPageRoute(
+      builder: (context) {
+        return const LoginPageWidget();
+      },
+      settings: RouteSettings(name: name, arguments: arguments));
+}
+
+var needChecLogiRouteName = [minePageRoute];
+
+bool checkNeedLoginPermission(String? name) {
+  return needChecLogiRouteName.contains(name);
+}

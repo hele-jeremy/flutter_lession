@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_lesson/flutter_lession/route%E8%B7%AF%E7%94%B1%E7%AE%A1%E7%90%86/page_args.dart';
-import 'package:flutter_lesson/flutter_lession/route%E8%B7%AF%E7%94%B1%E7%AE%A1%E7%90%86/page_modle1.dart';
+import 'package:flutter_lesson/flutter_lession/route%E8%B7%AF%E7%94%B1%E7%AE%A1%E7%90%86/route_config.dart';
 import 'package:flutter_lesson/flutter_lession/route%E8%B7%AF%E7%94%B1%E7%AE%A1%E7%90%86/route_page_1.dart';
-import 'package:flutter_lesson/utils/log_utils.dart';
 
 ///路由管理
 ///路由（Route）在移动开发中通常指页面（Page），这跟 Web 开发中单页应用的 Route 概念意义是相同的，
@@ -38,12 +37,11 @@ class _RouteTestWidgetState extends State<RouteTestWidget> {
                     var returnData = await Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return RoutePage1(
+                        ///通过构造函数的方式传递参数
                         args: PageArgs.from(["1000100101", 2]),
                       );
                     }));
 
-                    LogUtils.d("RoutePage1 returu data:$returnData");
-                    // assert(returnData is PageModel1);
                     if (!mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text("接收到返回的数据:\n$returnData"),
@@ -60,6 +58,8 @@ class _RouteTestWidgetState extends State<RouteTestWidget> {
               onPressed: () {
                 Navigator.of(context)
                     .pushNamed(RoutePage1.routeName,
+
+                        ///通过ModalRoute的方式传递参数
                         arguments: PageArgs(id: "2131313", action: 33))
                     .then((value) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -67,7 +67,7 @@ class _RouteTestWidgetState extends State<RouteTestWidget> {
                 });
               },
               child: const Text(
-                "命名路由的方式:\n打开页面一(传参数)",
+                "命名路由的方式:\n打开页面一(传参)",
                 textAlign: TextAlign.center,
               ),
             ),
@@ -76,6 +76,7 @@ class _RouteTestWidgetState extends State<RouteTestWidget> {
             margin: const EdgeInsets.all(10),
             child: ElevatedButton(
               onPressed: () async {
+                ///没有传递参数,在路由表中会传递一个默认参数
                 var nameRouteReturnValue =
                     await Navigator.of(context).pushNamed(RoutePage1.routeName);
 
@@ -84,6 +85,25 @@ class _RouteTestWidgetState extends State<RouteTestWidget> {
                     content: Text("命名路由不传参接收结果:\n$nameRouteReturnValue")));
               },
               child: const Text("命名路由方式:\n打开页面一(不传参)"),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.all(10),
+            child: ElevatedButton(
+              onPressed: () {
+                //https://zhuanlan.zhihu.com/p/56289929
+                Navigator.of(context).pushNamed(minePageRoute);
+              },
+              child: const Text("通过路由生成钩子"),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.all(10),
+            child: ElevatedButton(
+              onPressed: () {
+                hasLogin = false;
+              },
+              child: const Text("退出登录"),
             ),
           )
         ],

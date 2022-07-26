@@ -22,7 +22,10 @@ class MyApp extends StatelessWidget {
       initialRoute: initRoute,
 
       ///注册路由表 Map<String,WidgetBuilder>
-      routes: routeTableGenerator(),
+      // routes: routeTableGenerator(),
+
+      ///路由生成钩子
+      onGenerateRoute: onGenerateRoute,
     );
   }
 }

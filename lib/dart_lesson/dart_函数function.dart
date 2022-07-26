@@ -6,24 +6,30 @@ class DartFunction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        MaterialButton(
-            onPressed: _funcTest,
-            child:
-                Text("Dart中的函数", style: Theme.of(context).textTheme.headline6))
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Dart中的函数"),
+        centerTitle: true,
+      ),
+      body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          MaterialButton(
+              onPressed: _funcTest,
+              child: Text("Dart中的函数",
+                  style: Theme.of(context).textTheme.headline6))
+        ]),
+        Container(
+            margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              MaterialButton(
+                  onPressed: _typeDefTest,
+                  child: Text(
+                    "类型别名typedef",
+                    style: Theme.of(context).textTheme.headline6,
+                  ))
+            ]))
       ]),
-      Container(
-          margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            MaterialButton(
-                onPressed: _typeDefTest,
-                child: Text(
-                  "类型别名typedef",
-                  style: Theme.of(context).textTheme.headline6,
-                ))
-          ]))
-    ]);
+    );
   }
 
   void _funcTest() {
@@ -392,8 +398,9 @@ class _Event {}
 ///如果函数类型特别长或经常使用，那么还是有必要使用 typedef 进行定义。
 ///但在大多数情况下，使用者更希望知道函数使用时的真实类型，这样函数类型语法使它们清晰。
 class FilteredObservable {
-  final bool Function(_Event) _predicate;  //定义了一个函数类型 返回值为bool 接受参数为_Event
-  final List<void Function(_Event)> _observers; //定义了一个List类型，定义元素泛型为函数类型:返回值为void 接受参数为_Event
+  final bool Function(_Event) _predicate; //定义了一个函数类型 返回值为bool 接受参数为_Event
+  final List<void Function(_Event)>
+      _observers; //定义了一个List类型，定义元素泛型为函数类型:返回值为void 接受参数为_Event
 
   FilteredObservable(this._predicate, this._observers);
 
@@ -411,7 +418,7 @@ class FilteredObservable {
   }
 
   //定义函数参数也可以使用,Function同时可以使用泛型
-  Iterable<T> where<T>(bool Function(T) predicate,T value){
+  Iterable<T> where<T>(bool Function(T) predicate, T value) {
     if (predicate(value)) {
       return [value];
     }

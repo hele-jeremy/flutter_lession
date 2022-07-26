@@ -7,6 +7,7 @@ class StateLifecycleTestRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const CounterStateWidget();
+
     ///测试CounterStateWidget从树中被移除
     // return const Text("将CounterStateWidget从Widget树中移除");
   }
@@ -56,6 +57,10 @@ class _MyCounterState extends State<CounterStateWidget> {
   Widget build(BuildContext context) {
     LogUtils.d("build.......");
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("State生命周期测试"),
+      ),
       body: Center(
         child: Container(
           color: Colors.yellow,
@@ -89,7 +94,6 @@ class _MyCounterState extends State<CounterStateWidget> {
     super.didUpdateWidget(oldWidget);
     LogUtils.d("didUpdateWidget.......");
   }
-
 
   ///当 State 对象从树中被移除时，会调用此回调。在一些场景下，Flutter 框架会将 State 对象重新插到树中，
   ///如包含此 State 对象的子树在树的一个位置移动到另一个位置时（可以通过GlobalKey 来实现）。

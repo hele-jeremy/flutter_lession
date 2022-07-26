@@ -6,21 +6,27 @@ import 'package:flutter_lesson/utils/log_utils.dart';
 
 ///Dart中的异步支持
 
-class DartAsync extends StatelessWidget {
-  const DartAsync({Key? key}) : super(key: key);
+class DartAsyncAwaitFuture extends StatelessWidget {
+  const DartAsyncAwaitFuture({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-      Container(
-          margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            MaterialButton(
-                onPressed: _dartAsync,
-                child: Text("dart异步",
-                    style: Theme.of(context).textTheme.headline6))
-          ]))
-    ]);
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Dart中的async,await,Future"),
+      ),
+      body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+        Container(
+            margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              MaterialButton(
+                  onPressed: _dartAsync,
+                  child: Text("dart异步",
+                      style: Theme.of(context).textTheme.headline6))
+            ]))
+      ]),
+    );
   }
 
   void _dartAsync() {

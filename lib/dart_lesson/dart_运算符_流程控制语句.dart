@@ -8,24 +8,30 @@ class DartOperator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-      Container(
-          margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            MaterialButton(
-                onPressed: _dartOperator,
-                child: Text("Dart中的运算符",
-                    style: Theme.of(context).textTheme.headline6))
-          ])),
-      Container(
-          margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            MaterialButton(
-                onPressed: _dartFlowControl,
-                child: Text("流程控制语句",
-                    style: Theme.of(context).textTheme.headline6))
-          ]))
-    ]);
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Dart中的操作符和流程控制语句"),
+      ),
+      body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+        Container(
+            margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              MaterialButton(
+                  onPressed: _dartOperator,
+                  child: Text("Dart中的运算符",
+                      style: Theme.of(context).textTheme.headline6))
+            ])),
+        Container(
+            margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              MaterialButton(
+                  onPressed: _dartFlowControl,
+                  child: Text("流程控制语句",
+                      style: Theme.of(context).textTheme.headline6))
+            ]))
+      ]),
+    );
   }
 
   void _dartOperator() {
@@ -201,7 +207,7 @@ class DartOperator extends StatelessWidget {
     switch (ss) {
       case SwitchState.open:
         LogUtils.d("state : open");
-        var aa = 11;  //每个case字句都可以有局部变量，并且仅在该case字句内可见
+        var aa = 11; //每个case字句都可以有局部变量，并且仅在该case字句内可见
         break;
       case SwitchState.pending:
         LogUtils.d("state : pending");
@@ -222,12 +228,11 @@ class DartOperator extends StatelessWidget {
         LogUtils.d("state : default");
     }
 
-
     //assert 断言 :
     //flutter调试模式情况下断言生效，在生产环境代码中断言会被忽略
     //同时断言是否生效也依赖开发的工具和以来的框架
     var value = 100;
-    assert(value > 100,"value shoule more than 100!!");
+    assert(value > 100, "value shoule more than 100!!");
   }
 }
 

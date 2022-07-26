@@ -8,16 +8,22 @@ class DartEnums extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-      Container(
-          margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            MaterialButton(
-                onPressed: _eunuTest,
-                child: Text("枚举Enum",
-                    style: Theme.of(context).textTheme.headline6))
-          ]))
-    ]);
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Dart枚举Enum"),
+      ),
+      body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+        Container(
+            margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              MaterialButton(
+                  onPressed: _eunuTest,
+                  child: Text("枚举Enum",
+                      style: Theme.of(context).textTheme.headline6))
+            ]))
+      ]),
+    );
   }
 
   void _eunuTest() {
@@ -91,13 +97,14 @@ enum Plain {
   baz;
 }
 
-class A{}
+class A {}
 
 ///enum枚举可以包含多种构造函数
 ///并且枚举不能再继承其他类,并且不能重写== hashCode index这些方法后者getter方法
-enum LogPriority{
+enum LogPriority {
   warning(priority: 2, prefix: "warning"),
   error(priority: 1, prefix: "error"),
+
   ///log只是一个枚举实例的对象的名称，同时其是由unkonwn命名函数生成的
   log.unkonwn(prefix: "Log");
 

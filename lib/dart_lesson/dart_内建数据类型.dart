@@ -8,46 +8,52 @@ class DartBuiltInTypes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          MaterialButton(
-              onPressed: _numType,
-              child:
-                  Text("num数字类型", style: Theme.of(context).textTheme.headline6))
-        ]),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          MaterialButton(
-              onPressed: _stringType,
-              child: Text("String字符串类型",
-                  style: Theme.of(context).textTheme.headline6))
-        ]),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          MaterialButton(
-              onPressed: _boolType,
-              child:
-                  Text("bool类型", style: Theme.of(context).textTheme.headline6))
-        ]),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          MaterialButton(
-              onPressed: _listType,
-              child: Text("List集合类型",
-                  style: Theme.of(context).textTheme.headline6))
-        ]),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          MaterialButton(
-              onPressed: _mapType,
-              child:
-                  Text("Map集合类型", style: Theme.of(context).textTheme.headline6))
-        ]),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          MaterialButton(
-              onPressed: _varObjectDynamic,
-              child: Text("var Object dynamic三者的区别",
-                  style: Theme.of(context).textTheme.headline6))
-        ])
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Dart中的数据类型"),
+        centerTitle: true,
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            MaterialButton(
+                onPressed: _numType,
+                child: Text("num数字类型",
+                    style: Theme.of(context).textTheme.headline6))
+          ]),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            MaterialButton(
+                onPressed: _stringType,
+                child: Text("String字符串类型",
+                    style: Theme.of(context).textTheme.headline6))
+          ]),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            MaterialButton(
+                onPressed: _boolType,
+                child: Text("bool类型",
+                    style: Theme.of(context).textTheme.headline6))
+          ]),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            MaterialButton(
+                onPressed: _listType,
+                child: Text("List集合类型",
+                    style: Theme.of(context).textTheme.headline6))
+          ]),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            MaterialButton(
+                onPressed: _mapType,
+                child: Text("Map集合类型",
+                    style: Theme.of(context).textTheme.headline6))
+          ]),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            MaterialButton(
+                onPressed: _varObjectDynamic,
+                child: Text("var Object dynamic三者的区别",
+                    style: Theme.of(context).textTheme.headline6))
+          ])
+        ],
+      ),
     );
   }
 
@@ -247,7 +253,7 @@ class DartBuiltInTypes extends StatelessWidget {
       return element.isOdd;
     })}");
 
-    List<int> intList = const [1,2,3];  //可读不可写
+    List<int> intList = const [1, 2, 3]; //可读不可写
     // intList.add(100);  //运行时异常:Unsupported operation: Cannot add to an unmodifiable list
   }
 

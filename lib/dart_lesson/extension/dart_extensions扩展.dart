@@ -10,16 +10,22 @@ class DartExtensions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-      Container(
-          margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            MaterialButton(
-                onPressed: _extensionTest,
-                child: Text("扩展Extension",
-                    style: Theme.of(context).textTheme.headline6))
-          ]))
-    ]);
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Dart中的扩展"),
+      ),
+      body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+        Container(
+            margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              MaterialButton(
+                  onPressed: _extensionTest,
+                  child: Text("扩展Extension",
+                      style: Theme.of(context).textTheme.headline6))
+            ]))
+      ]),
+    );
   }
 
   void _extensionTest() {
@@ -169,7 +175,7 @@ class Planet {
 
 extension PlanetExtensions on Planet {
   //静态扩展函数
-   static Planet from(Map<String, Object> json) =>
+  static Planet from(Map<String, Object> json) =>
       Planet(json["name"] as String, json["size"] as int);
 
   Map<String, Object> toJson() => {"name": name, "size": size};

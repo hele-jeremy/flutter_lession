@@ -15,18 +15,24 @@ class DartStream extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-      Container(
-          margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            MaterialButton(
-                onPressed: _dartStream,
-                child: Text(
-                  "Dart中的Stream",
-                  style: Theme.of(context).textTheme.headline6,
-                ))
-          ]))
-    ]);
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Dart异步Stream"),
+      ),
+      body: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+        Container(
+            margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              MaterialButton(
+                  onPressed: _dartStream,
+                  child: Text(
+                    "Dart中的Stream",
+                    style: Theme.of(context).textTheme.headline6,
+                  ))
+            ]))
+      ]),
+    );
   }
 
   void _dartStream() {
@@ -402,15 +408,15 @@ class DartStream extends StatelessWidget {
     new Future(() => print('future #3 of 4'))
 
         ///注意:当前的then是返回的一个新的future，因此相当于是往任务队列（event queue)队尾追加了一个事件,因此其是比Future(#4)后被处理的
-        .then((_) => new Future(() => print('future #3a (a new future)')))  //
-       /* .then((_) {
+        .then((_) => new Future(() => print('future #3a (a new future)'))) //
+        /* .then((_) {
       return new Future(() => print('future #3a (a new future)'));
-    })*//*.then((_) {
+    })*/ /*.then((_) {
       new Future(() => print('future #3a (a new future)'));
     })*/
 
         ///(_) => new Future(...) 和 (_){new Future(...);} 和 (_){return new Future(...);}三者的区别
-       ///以上三者都会新创建一个Future对象，相当于都会向事件队列(event queue)队尾添加一个待处理的event事件
+        ///以上三者都会新创建一个Future对象，相当于都会向事件队列(event queue)队尾添加一个待处理的event事件
         ///() => new Future(...) 和 (){return new Future(...);} 会将接下来的链式(chain)调用上的then整合到一起
         ///(){new Future(...);} 不会整合之前Future在其后面的then的调用
         .then((_) => print('future #3b'));

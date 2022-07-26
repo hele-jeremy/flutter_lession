@@ -47,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // const DartExtensions(),
       // const DartEnums(),
       // const DartExtensionImplementsMixin(),
-      const DartAsync(),
+      const DartAsyncAwaitFuture(),
       // const DartStream(),
     );
   }

@@ -10,6 +10,7 @@ import 'package:flutter_lesson/dart_lesson/dart_%E8%BF%90%E7%AE%97%E7%AC%A6_%E6%
 import 'package:flutter_lesson/dart_lesson/dart_basic.dart';
 import 'package:flutter_lesson/dart_lesson/enum/dart_enum%E6%9E%9A%E4%B8%BE.dart';
 import 'package:flutter_lesson/dart_lesson/extension/dart_extensions%E6%89%A9%E5%B1%95.dart';
+import 'package:flutter_lesson/flutter_lession/route%E8%B7%AF%E7%94%B1%E7%AE%A1%E7%90%86/NotFoundPage.dart';
 import 'package:flutter_lesson/flutter_lession/route%E8%B7%AF%E7%94%B1%E7%AE%A1%E7%90%86/login_page.dart';
 import 'package:flutter_lesson/flutter_lession/route%E8%B7%AF%E7%94%B1%E7%AE%A1%E7%90%86/mine_page.dart';
 import 'package:flutter_lesson/flutter_lession/route%E8%B7%AF%E7%94%B1%E7%AE%A1%E7%90%86/page_args.dart';
@@ -17,7 +18,7 @@ import 'package:flutter_lesson/flutter_lession/route%E8%B7%AF%E7%94%B1%E7%AE%A1%
 import 'package:flutter_lesson/flutter_lession/widget%E6%A0%91%E4%B8%AD%E8%8E%B7%E5%8F%96State%E5%AF%B9%E8%B1%A1.dart';
 import 'package:flutter_lesson/utils/log_utils.dart';
 
-import '../../_main.dart';
+import '../../main.dart';
 import '../flutter中的state状态的管理.dart';
 import '../state生命周期.dart';
 import '路由管理.dart';
@@ -40,9 +41,8 @@ const String widgetStateManageTest = "widget_state_manage_test";
 const String widgetStateObjectGetTest = "widget_state_object_get_test";
 ////////
 const String minePageRoute = "mine_page_route";
-
-///暂时先用静态变量记录当前的登录状态
-var hasLogin = false;
+const String loginPageRoute = "login_page_route";
+const String unknownPageRoute = "unknown_page_route";
 
 ///定义路由表
 Map<String, WidgetBuilder> routeTables = {
@@ -69,20 +69,33 @@ Map<String, WidgetBuilder> routeTables = {
   widgetStateObjectGetTest: (context) => const GetStateObjectRoute(),
   //////
   minePageRoute: (context) => const MinePageWidget(),
+  loginPageRoute: (context) => const LoginPageWidget()
 };
 
 Map<String, WidgetBuilder> routeTableGenerator() => routeTables;
 
+///暂时先用静态变量记录当前的登录状态
+var hasLogin = false;
+
 ///路由生成钩子
 Route<dynamic>? onGenerateRoute(RouteSettings settings) {
-  LogUtils.d("onGenerateRoute:{${settings.name} : ${settings.arguments}");
+  LogUtils.d("onGenerateRoute:{${settings.name} : ${settings.arguments}}");
 
-  if (!hasLogin && checkNeedLoginPermission(settings.name)) {
+  if (checkNeedLoginPermissionRoute(settings.name) && !hasLogin) {
     return buildJumpToLoginPageRoute(
         name: settings.name, arguments: settings.arguments);
   }
 
-  return MaterialPageRoute(builder: routeTables[settings.name]!);
+  try {
+    return MaterialPageRoute(
+        builder: routeTables[settings.name]!, settings: settings);
+  } catch (err, stackTrace) {
+    LogUtils.d(
+        "onGenerateRoute:${err.toString()}\nstackTrace:${stackTrace.toString()}");
+    return MaterialPageRoute(builder: (context) {
+      return NotFoundPageWidget(settings: settings);
+    });
+  }
 }
 
 Route buildJumpToLoginPageRoute({String? name, Object? arguments}) {
@@ -93,8 +106,17 @@ Route buildJumpToLoginPageRoute({String? name, Object? arguments}) {
       settings: RouteSettings(name: name, arguments: arguments));
 }
 
-var needChecLogiRouteName = [minePageRoute];
+var needCheckLogiRouteName = [minePageRoute];
 
-bool checkNeedLoginPermission(String? name) {
-  return needChecLogiRouteName.contains(name);
+bool checkNeedLoginPermissionRoute(String? name) {
+  return needCheckLogiRouteName.contains(name);
+}
+
+//////////////////
+Route<dynamic>? onUnknownRoute(RouteSettings settings) {
+  return MaterialPageRoute(builder: (context) {
+    return NotFoundPageWidget(
+      settings: settings,
+    );
+  });
 }

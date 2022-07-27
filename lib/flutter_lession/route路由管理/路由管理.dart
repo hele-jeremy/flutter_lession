@@ -37,7 +37,7 @@ class _RouteTestWidgetState extends State<RouteTestWidget> {
                     var returnData = await Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return RoutePage1(
-                        ///通过构造函数的方式传递参数
+                        ///通过构造函数的方式传递参数(这种一般适用于非命名路由的方式进行传值)
                         args: PageArgs.from(["1000100101", 2]),
                       );
                     }));
@@ -56,10 +56,11 @@ class _RouteTestWidgetState extends State<RouteTestWidget> {
             margin: const EdgeInsets.all(10),
             child: ElevatedButton(
               onPressed: () {
+                ///通过路由名打开新路由页
                 Navigator.of(context)
                     .pushNamed(RoutePage1.routeName,
 
-                        ///通过ModalRoute的方式传递参数
+                        ///传递参数(命名路由的方式进行传参)
                         arguments: PageArgs(id: "2131313", action: 33))
                     .then((value) {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -92,7 +93,8 @@ class _RouteTestWidgetState extends State<RouteTestWidget> {
             child: ElevatedButton(
               onPressed: () {
                 //https://zhuanlan.zhihu.com/p/56289929
-                Navigator.of(context).pushNamed(minePageRoute);
+                Navigator.of(context).pushNamed(minePageRoute,
+                    arguments: "传递给MinePage的参数:xxxxxx");
               },
               child: const Text("通过路由生成钩子"),
             ),
@@ -100,10 +102,28 @@ class _RouteTestWidgetState extends State<RouteTestWidget> {
           Container(
             margin: const EdgeInsets.all(10),
             child: ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, "/unkonwn_route",
+                  arguments: "未知参数:xxxx"),
+              child: const Text("测试打开一个未知的路由"),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.all(10),
+            child: ElevatedButton(
               onPressed: () {
-                hasLogin = false;
+                Navigator.pushNamedAndRemoveUntil(
+
+                    ///如果想在弹出新路由之前，删除路由栈中的部分路由
+                    ///利用ModalRoute.withName(name)，来执行判断，当所传的name跟堆栈中的路由所定义的时候，
+                    ///会返回true值，不匹配的话，则返回false
+                    context,
+                    minePageRoute,
+                    ModalRoute.withName(initRoute));
+
+                ///popUntil()方法的过程其实跟上面差不多，就是是少了push一个新页面的操作，只是单纯的进行移除路由操作
+                ///pushReplacementNamed() popAndPushNamed() () 移除跳转到新界面或者用界面替换当前的界面
               },
-              child: const Text("退出登录"),
+              child: const Text("测试pushNamedAndRemoveUntil使用"),
             ),
           )
         ],

@@ -38,12 +38,13 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
 
                     LogUtils.d(
                         "_LoginPageWidgetState name:$name : arguments:$arguments");
-                    // Navigator.of(context).pop();
-                    if (name?.isNotEmpty ?? false) {
+                    if ((name?.isNotEmpty ?? false) &&
+                        (name != loginPageRoute)) {
                       Navigator.of(context)
                           .popAndPushNamed(name!, arguments: arguments);
+                    } else {
+                      Navigator.of(context).popAndPushNamed(initRoute);
                     }
-
                   },
                   child: const Text("登录"),
                 ),

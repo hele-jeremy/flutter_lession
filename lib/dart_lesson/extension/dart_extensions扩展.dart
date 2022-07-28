@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_lesson/dart_lesson/extension/some_api.dart';
+import 'package:flutter_lesson/flutter_lession/extensions.dart';
 
 import '../../utils/log_utils.dart';
 
@@ -88,18 +89,6 @@ class DartExtensions extends StatelessWidget {
 ///扩展 https://dart.cn/guides/language/extension-methods
 ///扩展不仅可以扩展方法,也可以扩展很多的类型，例如：getter/setter/operarator操作符
 
-extension NumberParsing on String {
-  int parseInt() {
-    return int.parse(this);
-  }
-
-  double parseDouble() {
-    return double.parse(this);
-  }
-
-  String scream() => toUpperCase();
-}
-
 //自定义公里
 class MetricLength {
   final int meters;
@@ -117,25 +106,15 @@ class MetricLength {
   int get hashCode => Object.hashAll(meters.toList());
 }
 
-extension IntExtension on int {
-  void times(void Function(int) f) {
-    for (int i = 0; i < this; i++) {
-      // Function.apply(f, toListWithValue(i));
-      //  f.call(i);
-      f(i);
-    }
-  }
-
-  List<int> toList() => [this];
-
-  List<int> toListWithValue(int value) => [value];
-
+///未命名的extension扩展只能够在当前文件中使用
+extension on int {
   MetricLength get m => MetricLength(this);
 
   MetricLength get km => MetricLength(this * 1000);
 }
 
-extension ObjectExtension on Object {
+// extension ObjectExtension on Object {
+extension on Object {
   int nah() => hashCode + 42;
 
   Type type() => runtimeType;
@@ -143,7 +122,8 @@ extension ObjectExtension on Object {
   bool notAgain(Object other) => this != other;
 }
 
-extension ObjectNorExtension on Object? {
+// extension ObjectNorExtension on Object? {
+extension  on Object? {
   String stop(String x) => "${toString()}$x";
 }
 

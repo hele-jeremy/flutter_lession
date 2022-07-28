@@ -3,6 +3,7 @@ import 'package:flutter_lesson/flutter_lession/%E8%B5%84%E6%BA%90assets%E7%AE%A1
 import 'package:flutter_lesson/flutter_lession/flutter%E4%B8%AD%E7%9A%84%E5%8C%85%E7%9A%84%E7%AE%A1%E7%90%86_%E5%BC%95%E5%85%A5_%E4%BD%BF%E7%94%A8.dart';
 import 'package:flutter_lesson/flutter_lession/route%E8%B7%AF%E7%94%B1%E7%AE%A1%E7%90%86/route_config.dart';
 
+import 'flutter_lession/flutter调试debug_全局错误处理.dart';
 import 'global.dart';
 
 void main() {
@@ -140,7 +141,19 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                     child: const Text("assets资源管理引入使用"),
                   ),
-                )
+                ),
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  child: Builder(
+                    builder: (context) {
+                      return ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(DebugAndErrorHandleWidget.routeName);
+                          },
+                          child: const Text("debug调试和错误处理error handle"));
+                    },
+                  ),
+                ),
               ],
             ),
           ),

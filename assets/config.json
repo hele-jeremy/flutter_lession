@@ -1,0 +1,150 @@
+{
+  "data": {
+    "list": [
+      {
+        "auditStatus": "1",
+        "customerId": "2022072700000068",
+        "merchName": "佛祖拉黑人嗯我也",
+        "netType": "3",
+        "protocolStatus": "0",
+        "updateTime": "2022-07-27 14:05:53",
+        "wechatStatus": "1"
+      },
+      {
+        "auditStatus": "1",
+        "customerId": "2022072700000096",
+        "licenseName": "邯郸市复兴区荷塘小镇饭店",
+        "merchName": "路进件 了进件了了",
+        "netType": "1",
+        "protocolStatus": "0",
+        "updateTime": "2022-07-27 14:04:27",
+        "wechatStatus": "1"
+      },
+      {
+        "auditStatus": "1",
+        "customerId": "2022072600000066",
+        "merchName": "有机会可以接受他了",
+        "netType": "3",
+        "protocolStatus": "0",
+        "updateTime": "2022-07-26 20:23:21",
+        "wechatStatus": "1"
+      },
+      {
+        "auditStatus": "1",
+        "customerId": "2022072600000091",
+        "licenseName": "马鞍山楚阳电子商务有限公司",
+        "merchName": "有机会可以接受他了",
+        "netType": "1",
+        "protocolStatus": "0",
+        "updateTime": "2022-07-26 17:30:49",
+        "wechatStatus": "1"
+      },
+      {
+        "auditStatus": "1",
+        "customerId": "2022072600000090",
+        "licenseName": "邯郸市复兴区荷塘小镇饭店",
+        "merchName": "UK路铁路局把他他",
+        "netType": "1",
+        "protocolStatus": "0",
+        "updateTime": "2022-07-26 16:02:16",
+        "wechatStatus": "1"
+      },
+      {
+        "auditStatus": "1",
+        "customerId": "2022072300000052",
+        "merchName": "小酒鬼花生米饭店",
+        "netType": "3",
+        "protocolStatus": "0",
+        "updateTime": "2022-07-26 14:57:26",
+        "wechatStatus": "1"
+      },
+      {
+        "auditStatus": "1",
+        "customerId": "2022072300000047",
+        "merchName": "0723小微测试小店",
+        "netType": "3",
+        "protocolStatus": "0",
+        "updateTime": "2022-07-26 14:57:25",
+        "wechatStatus": "1"
+      },
+      {
+        "auditStatus": "1",
+        "customerId": "2022072300000048",
+        "merchName": "0723验收测试",
+        "netType": "3",
+        "protocolStatus": "0",
+        "updateTime": "2022-07-26 14:57:25",
+        "wechatStatus": "1"
+      },
+      {
+        "auditStatus": "1",
+        "customerId": "2022072000000014",
+        "merchName": "88888888888",
+        "netType": "3",
+        "protocolStatus": "0",
+        "updateTime": "2022-07-26 14:57:20",
+        "wechatStatus": "1"
+      },
+      {
+        "auditStatus": "1",
+        "customerId": "2022072100000033",
+        "merchName": "北京故宫博物院",
+        "netType": "3",
+        "protocolStatus": "0",
+        "updateTime": "2022-07-26 14:57:20",
+        "wechatStatus": "1"
+      },
+      {
+        "auditStatus": "1",
+        "customerId": "2022072200000038",
+        "licenseName": "马鞍山楚阳电子商务有限公司",
+        "merchName": "企业类型商户进件啦啊",
+        "netType": "1",
+        "protocolStatus": "0",
+        "updateTime": "2022-07-26 09:34:44",
+        "wechatStatus": "1"
+      },
+      {
+        "auditStatus": "1",
+        "customerId": "2022072300000050",
+        "merchName": "很辛苦的京东快递",
+        "netType": "3",
+        "protocolStatus": "0",
+        "updateTime": "2022-07-23 17:16:42",
+        "wechatStatus": "1"
+      },
+      {
+        "auditStatus": "1",
+        "customerId": "2022072300000046",
+        "merchName": "鱼鱼鱼 鱼鱼鱼鱼鱼",
+        "netType": "3",
+        "protocolStatus": "0",
+        "updateTime": "2022-07-23 11:09:48",
+        "wechatStatus": "1"
+      },
+      {
+        "auditStatus": "1",
+        "customerId": "2022072200000041",
+        "merchName": "6 6  658585585885050588",
+        "netType": "3",
+        "protocolStatus": "0",
+        "updateTime": "2022-07-22 16:51:52"
+      },
+      {
+        "auditStatus": "1",
+        "customerId": "2022072200000037",
+        "licenseName": "马鞍山楚阳电子商务有限公司",
+        "merchName": "哦 哦就將 就將 佢近距離 ",
+        "netType": "1",
+        "protocolStatus": "0",
+        "updateTime": "2022-07-22 10:31:59",
+        "wechatStatus": "1"
+      }
+    ]
+  },
+  "limit": 20,
+  "offset": 0,
+  "retCode": "00",
+  "retMsg": "请求成功",
+  "total": 0
+}

@@ -10,6 +10,8 @@ import 'package:flutter_lesson/dart_lesson/dart_%E8%BF%90%E7%AE%97%E7%AC%A6_%E6%
 import 'package:flutter_lesson/dart_lesson/dart_basic.dart';
 import 'package:flutter_lesson/dart_lesson/enum/dart_enum%E6%9E%9A%E4%B8%BE.dart';
 import 'package:flutter_lesson/dart_lesson/extension/dart_extensions%E6%89%A9%E5%B1%95.dart';
+import 'package:flutter_lesson/flutter_lession/%E8%B5%84%E6%BA%90assets%E7%AE%A1%E7%90%86.dart';
+import 'package:flutter_lesson/flutter_lession/flutter%E4%B8%AD%E7%9A%84%E5%8C%85%E7%9A%84%E7%AE%A1%E7%90%86_%E5%BC%95%E5%85%A5_%E4%BD%BF%E7%94%A8.dart';
 import 'package:flutter_lesson/flutter_lession/route%E8%B7%AF%E7%94%B1%E7%AE%A1%E7%90%86/NotFoundPage.dart';
 import 'package:flutter_lesson/flutter_lession/route%E8%B7%AF%E7%94%B1%E7%AE%A1%E7%90%86/login_page.dart';
 import 'package:flutter_lesson/flutter_lession/route%E8%B7%AF%E7%94%B1%E7%AE%A1%E7%90%86/mine_page.dart';
@@ -69,7 +71,9 @@ Map<String, WidgetBuilder> routeTables = {
   widgetStateObjectGetTest: (context) => const GetStateObjectRoute(),
   //////
   minePageRoute: (context) => const MinePageWidget(),
-  loginPageRoute: (context) => const LoginPageWidget()
+  loginPageRoute: (context) => const LoginPageWidget(),
+  RandomWordWidget.routeName: (context) => const RandomWordWidget(),
+  AssetsManageWidget.routeName: (context) => const AssetsManageWidget(),
 };
 
 Map<String, WidgetBuilder> routeTableGenerator() => routeTables;

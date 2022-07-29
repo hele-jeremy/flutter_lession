@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_lesson/flutter_lession/extensions.dart';
 
 class FlutterCommonBasicWidget extends StatefulWidget {
   static const routeName = "flutter_common_basic_widget_route";
@@ -116,7 +115,25 @@ class _FlutterCommonBasicWidgetState extends State<FlutterCommonBasicWidget> {
                             : null,
                       ),
                   ],
-                ))
+                )),
+            ElevatedButton(
+                onPressed: () {}, child: const Text("ElevatedButton")),
+            ElevatedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.send),
+                label: const Text("EvelatedButton发送")),
+            TextButton(onPressed: () {}, child: const Text("TextButton")),
+            TextButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.info),
+                label: const Text("TextButton详情")),
+            OutlinedButton(
+                onPressed: () {}, child: const Text("OutlinedButton")),
+            OutlinedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.add),
+                label: const Text("OutlinedButton添加")),
+            IconButton(onPressed: () {}, icon: const Icon(Icons.thumb_up))
           ],
         ))));
   }

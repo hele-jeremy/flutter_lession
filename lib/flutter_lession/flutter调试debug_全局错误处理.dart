@@ -71,27 +71,33 @@ class _DebugAndErrorHandleWidgetState extends State<DebugAndErrorHandleWidget> {
                   child: const Text("模拟同步异常")),
               ElevatedButton(
                   onPressed: () async {
-                    Future.delayed(const Duration(seconds: 1),
-                            () => throw Exception("Future类型的异常"))
+                    ///直接抛出异常的方式，catchError无法捕获住异常,会有一个Unhandled Exception不建议这样子来处理
+                    // Future.delayed(const Duration(seconds: 1),
+                    //         () => throw Exception("Future类型的异常"))
+                    ///通过Future.error的方式catchError可以捕获到Future的异常
+                    /*Future.delayed(const Duration(seconds: 1),
+                            () => Future.error(Exception("Future类型的异常")))
                         .catchError((err, stackTrace) {
                       LogUtils.d("通过catchError来捕获Future异步异常");
-                      // ignore: invalid_return_type_for_catch_error
-                      return Future.value();
-                    });
-                    // try {
-                    //   ///在Flutter中，还有一些Flutter没有为我们捕获的异常，如调用空对象方法异常、Future中的异常。
-                    //   ///在Dart中，异常分两类：同步异常和异步异常，同步异常可以通过try/catch捕获，
-                    //   ///而异步异常（Future异常）通过try..catch..是捕获不了的
-                    //   Future.delayed(const Duration(seconds: 1),
-                    //       () => throw Exception("模拟的异步异常"));
-                    // } catch (err, stackTrace) {
-                    //   LogUtils.d("捕获了future的异步异常");
-                    // }
+                    });*/
+                    try {
+                      ///在Flutter中，还有一些Flutter没有为我们捕获的异常，如调用空对象方法异常、Future中的异常。
+                      ///在Dart中，异常分两类：同步异常和异步异常，同步异常可以通过try/catch捕获，
+                      ///而异步异常（Future异常）通过try..catch..是捕获不了的
+                      Future.delayed(const Duration(seconds: 1),
+                          () => throw Exception("模拟的异步异常"));
+                      // Future.delayed(const Duration(seconds: 1),
+                      //     () => Future.error(Exception("模拟的异步异常")));
+                    } catch (err, stackTrace) {
+                      LogUtils.d("捕获了future的异步异常");
+                    }
                     // try {
                     //   ///通过await等待Future结果,可以通过try...catch..的方式捕获异常
                     //   ///相当于同步(sync)异常是可以被try..catch..给捕获的
+                    //   // await Future.delayed(const Duration(seconds: 1),
+                    //   //     () => throw Exception("模拟的异步异常"));
                     //   await Future.delayed(const Duration(seconds: 1),
-                    //       () => throw Exception("模拟的异步异常"));
+                    //       () => Future.error(Exception("模拟的异步异常")));
                     // } catch (err, stackTrace) {
                     //   LogUtils.d("捕获了future的异步异常");
                     // }
@@ -99,6 +105,23 @@ class _DebugAndErrorHandleWidgetState extends State<DebugAndErrorHandleWidget> {
                     LogUtils.d("future继续执行");
                   },
                   child: const Text("模拟异步异常")),
+              ElevatedButton(
+                  onPressed: () {
+                    Future.sync(() {
+                      Future.delayed(
+                              const Duration(seconds: 1),
+                              () => Future.error(
+                                  const FormatException("Future format 异常!")))
+                          .catchError((err, stackTrace) {
+                        LogUtils.d("catchError捕获Future异常");
+                      });
+                      throw Exception("抛出的同步sync异常");
+                      LogUtils.d("future 后的运行");
+                    }).catchError((err, stackTrace) {
+                      LogUtils.d("Future sync catchError捕获异常$err");
+                    }).whenComplete(() => LogUtils.d("Future sync() done!"));
+                  },
+                  child: const Text("通过Future.sync()处理Future异常")),
               ElevatedButton(
                   onPressed: () {
                     runZoned(() {
@@ -126,7 +149,7 @@ class _DebugAndErrorHandleWidgetState extends State<DebugAndErrorHandleWidget> {
                           // parent.print(zone, "${error.toString()} $stackTrace");
                           if (zone["handleError"] as bool) {
                             parent.print(
-                                zone, "zone捕获到了异常: ${error.toString()}");
+                                zone, "zone捕获到了异常: ${error.toString()} $stackTrace");
                           }
                         }));
                   },

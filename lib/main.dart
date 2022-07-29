@@ -7,8 +7,7 @@ import 'flutter_lession/flutter调试debug_全局错误处理.dart';
 import 'global.dart';
 
 void main() {
-  Global.init();
-  runApp(const MyApp());
+  launch();
 }
 
 class MyApp extends StatelessWidget {
@@ -148,7 +147,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     builder: (context) {
                       return ElevatedButton(
                           onPressed: () {
-                            Navigator.of(context).pushNamed(DebugAndErrorHandleWidget.routeName);
+                            Navigator.of(context)
+                                .pushNamed(DebugAndErrorHandleWidget.routeName);
                           },
                           child: const Text("debug调试和错误处理error handle"));
                     },

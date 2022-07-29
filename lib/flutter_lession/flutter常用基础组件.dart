@@ -13,6 +13,8 @@ class FlutterCommonBasicWidget extends StatefulWidget {
 
 class _FlutterCommonBasicWidgetState extends State<FlutterCommonBasicWidget> {
   static const String url = "https://www.google.com/";
+  static const String girlUrl =
+      "https://pic.3gbizhi.com/2019/0907/thumb_1680_0_20190907025106350.jpg";
   late TapGestureRecognizer _recognizer;
 
   @override
@@ -133,7 +135,36 @@ class _FlutterCommonBasicWidgetState extends State<FlutterCommonBasicWidget> {
                 onPressed: () {},
                 icon: const Icon(Icons.add),
                 label: const Text("OutlinedButton添加")),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.thumb_up))
+            IconButton(onPressed: () {}, icon: const Icon(Icons.thumb_up)),
+            const Image(
+              image: AssetImage("assets/images/user_avatar.png"),
+              width: 100,
+              height: 100,
+            ),
+            Image.asset(
+              "assets/images/user_avatar.png",
+              height: 200,
+              width: 200,
+            ),
+            const Image(
+                image: NetworkImage(girlUrl) /*,width: 100,height: 100,*/),
+            Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Image.network(
+                  girlUrl,
+                  width: 160,
+                  height: 90,
+                )),
+
+            // <BoxFit, String>{
+            //   BoxFit.fill: "https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_fill.png",
+            //   BoxFit.contain:"https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_contain.png",
+            //   BoxFit.cover:"https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_cover.png",
+            //   BoxFit.fitWidth:"https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_fitWidth.png",
+            //   BoxFit.fitHeight:"https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_fitHeight.png",
+            //   BoxFit.none:"https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_none.png",
+            //   BoxFit.scaleDown:"https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_scaleDown.png"
+            // }
           ],
         ))));
   }

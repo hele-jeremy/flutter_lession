@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lesson/flutter_lession/extensions.dart';
 
+
 class FlutterCommonBasicWidget extends StatefulWidget {
   static const routeName = "flutter_common_basic_widget_route";
 
@@ -12,7 +13,8 @@ class FlutterCommonBasicWidget extends StatefulWidget {
       _FlutterCommonBasicWidgetState();
 }
 
-class _FlutterCommonBasicWidgetState extends State<FlutterCommonBasicWidget> {
+class _FlutterCommonBasicWidgetState extends State<FlutterCommonBasicWidget>
+    with SingleTickerProviderStateMixin<FlutterCommonBasicWidget> {
   static const String url = "https://www.google.com/";
   static const String girlUrl =
       "https://pic.3gbizhi.com/2019/0907/thumb_1680_0_20190907025106350.jpg";
@@ -22,10 +24,25 @@ class _FlutterCommonBasicWidgetState extends State<FlutterCommonBasicWidget> {
   bool _checkboxState = true;
   bool? _checkboxState2 = true;
 
+  late AnimationController _animationController;
+
   @override
   void initState() {
     super.initState();
     _recognizer = TapGestureRecognizer();
+    _animationController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    _animationController
+      ..repeat()
+      ..addListener(() {
+        setState(() => {});
+      });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -260,6 +277,66 @@ class _FlutterCommonBasicWidgetState extends State<FlutterCommonBasicWidget> {
                         }))
               ],
             ),
+
+            ///进度指示器
+            ///https://pub.flutter-io.cn/packages/flutter_spinkit
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: LinearProgressIndicator(
+                backgroundColor: Colors.grey[200],
+                valueColor: const AlwaysStoppedAnimation(Colors.blue),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(15),
+              child: SizedBox(
+                height: 8,
+                child: LinearProgressIndicator(
+                  value: 0.5,
+                  backgroundColor: Colors.grey,
+                  valueColor: AlwaysStoppedAnimation(Colors.purple),
+                ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(15),
+              child: SizedBox(
+                ///长宽比例不对的话，圆形进度条可能展示为椭圆
+                width: 120,
+                height: 80,
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.grey,
+                  valueColor: AlwaysStoppedAnimation(Colors.yellow),
+                  strokeWidth: 5,
+                ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(15),
+              child: SizedBox(
+                height: 100,
+                width: 100,
+                child: CircularProgressIndicator(
+                  value: 0.75,
+                  strokeWidth: 3,
+                  backgroundColor: Colors.grey,
+                  valueColor: AlwaysStoppedAnimation(Colors.redAccent),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: SizedBox(
+                width: 80,
+                height: 80,
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.grey[200],
+                  valueColor: ColorTween(begin: Colors.grey, end: Colors.blue)
+                      .animate(_animationController),
+                  value: _animationController.value,
+                ),
+              ),
+            )
           ],
         ))));
   }

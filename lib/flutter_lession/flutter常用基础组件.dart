@@ -259,7 +259,7 @@ class _FlutterCommonBasicWidgetState extends State<FlutterCommonBasicWidget> {
                           ));
                         }))
               ],
-            )
+            ),
           ],
         ))));
   }

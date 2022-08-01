@@ -33,20 +33,23 @@ void reportErrorAndLog(FlutterErrorDetails details) {
 /// 同时捕获了全局为捕获的异常
 void launch() {
   init();
-  onError = FlutterError.onError;
-  FlutterError.onError = errorHandler;
-  runZoned(() {
-    runApp(const MyApp());
-  },
-      zoneValues: {"logTag": logTag},
-      zoneSpecification: ZoneSpecification(
-          print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
-            collectLog(line);
-            parent.print(zone, "${zone["logTag"]}: $line");
-          }, handleUncaughtError: (Zone self, ZoneDelegate parent, Zone zone,
-          Object error, StackTrace stackTrace) {
-        reportErrorAndLog(
-            FlutterErrorDetails(exception: error, stack: stackTrace));
-        parent.print(zone, "${error.toString()} $stackTrace");
-      }));
+  ///暂时先屏蔽掉全局异常捕获
+  runApp(const MyApp());
+
+  // onError = FlutterError.onError;
+  // FlutterError.onError = errorHandler;
+  // runZoned(() {
+  //   runApp(const MyApp());
+  // },
+  //     zoneValues: {"logTag": logTag},
+  //     zoneSpecification: ZoneSpecification(
+  //         print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
+  //           collectLog(line);
+  //           parent.print(zone, "${zone["logTag"]}: $line");
+  //         }, handleUncaughtError: (Zone self, ZoneDelegate parent, Zone zone,
+  //         Object error, StackTrace stackTrace) {
+  //       reportErrorAndLog(
+  //           FlutterErrorDetails(exception: error, stack: stackTrace));
+  //       parent.print(zone, "${error.toString()} $stackTrace");
+  //     }));
 }

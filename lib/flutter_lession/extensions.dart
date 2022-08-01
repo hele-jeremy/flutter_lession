@@ -27,3 +27,10 @@ extension NumberParsing on String {
 
   String scream() => toUpperCase();
 }
+
+extension MapExtension<K, V> on Map<K, V> {
+
+  List<R> transformMap<R>(R Function(MapEntry<K, V> entry) transformer) {
+    return [for (final kvEntry in entries) transformer(kvEntry)];
+  }
+}

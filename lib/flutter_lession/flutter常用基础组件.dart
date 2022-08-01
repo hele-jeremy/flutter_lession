@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_lesson/flutter_lession/extensions.dart';
 
 class FlutterCommonBasicWidget extends StatefulWidget {
   static const routeName = "flutter_common_basic_widget_route";
@@ -156,15 +157,40 @@ class _FlutterCommonBasicWidgetState extends State<FlutterCommonBasicWidget> {
                   height: 90,
                 )),
 
-            // <BoxFit, String>{
-            //   BoxFit.fill: "https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_fill.png",
-            //   BoxFit.contain:"https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_contain.png",
-            //   BoxFit.cover:"https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_cover.png",
-            //   BoxFit.fitWidth:"https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_fitWidth.png",
-            //   BoxFit.fitHeight:"https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_fitHeight.png",
-            //   BoxFit.none:"https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_none.png",
-            //   BoxFit.scaleDown:"https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_scaleDown.png"
-            // }
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Text(
+                "Image的缩放模式(BoxFit)",
+                style: TextStyle(
+                    color: Colors.red,
+                    fontStyle: FontStyle.italic,
+                    fontSize: 22),
+              ),
+            ),
+            ...<BoxFit, String>{
+              BoxFit.fill:
+                  "https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_fill.png",
+              BoxFit.contain:
+                  "https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_contain.png",
+              BoxFit.cover:
+                  "https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_cover.png",
+              BoxFit.fitWidth:
+                  "https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_fitWidth.png",
+              BoxFit.fitHeight:
+                  "https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_fitHeight.png",
+              BoxFit.none:
+                  "https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_none.png",
+              BoxFit.scaleDown:
+                  "https://flutter.github.io/assets-for-api-docs/assets/painting/box_fit_scaleDown.png"
+            }.transformMap((entry) => Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text("Boxfit.${entry.key.name}"),
+                    ),
+                    Image.network(entry.value)
+                  ],
+                ))
           ],
         ))));
   }

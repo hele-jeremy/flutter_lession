@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_lesson/flutter_lession/%E8%B5%84%E6%BA%90assets%E7%AE%A1%E7%90%86.dart';
 import 'package:flutter_lesson/flutter_lession/flutter%E4%B8%AD%E7%9A%84%E5%8C%85%E7%9A%84%E7%AE%A1%E7%90%86_%E5%BC%95%E5%85%A5_%E4%BD%BF%E7%94%A8.dart';
+import 'package:flutter_lesson/flutter_lession/flutter%E5%B8%83%E5%B1%80%E7%B1%BB%E7%BB%84%E4%BB%B6.dart';
 import 'package:flutter_lesson/flutter_lession/flutter%E5%B8%B8%E7%94%A8%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6.dart';
 import 'package:flutter_lesson/flutter_lession/flutter%E5%B8%B8%E7%94%A8%E7%BB%84%E4%BB%B6TextField%E5%92%8CForm.dart';
 import 'package:flutter_lesson/flutter_lession/route%E8%B7%AF%E7%94%B1%E7%AE%A1%E7%90%86/route_config.dart';
@@ -174,6 +175,17 @@ class _MyHomePageState extends State<MyHomePage> {
                           .pushNamed(FlutterTextFieldAndFormWidget.routeName);
                     },
                     child: const Text("Flutter常用基础组件TextField_Form"),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .pushNamed(FlutterLayoutTypeWidget
+                          .routeName);
+                    },
+                    child: const Text("Flutter布局layout类组件"),
                   ),
                 )
               ],

@@ -18,6 +18,10 @@ class _FlutterCommonBasicWidgetState extends State<FlutterCommonBasicWidget> {
       "https://pic.3gbizhi.com/2019/0907/thumb_1680_0_20190907025106350.jpg";
   late TapGestureRecognizer _recognizer;
 
+  bool _switchState = true;
+  bool _checkboxState = true;
+  bool? _checkboxState2 = true;
+
   @override
   void initState() {
     super.initState();
@@ -190,7 +194,72 @@ class _FlutterCommonBasicWidgetState extends State<FlutterCommonBasicWidget> {
                     ),
                     Image.network(entry.value)
                   ],
-                ))
+                )),
+
+            ///图标IconFont的使用(Flutter内置和自定义字体图标)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.accessible, color: Colors.green),
+                  Icon(Icons.error, color: Colors.red),
+                  Icon(Icons.fingerprint, color: Colors.green)
+                ],
+              ),
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("是否开启:"),
+                Switch(
+                    value: _switchState,
+                    activeColor: Colors.blue,
+                    onChanged: (value) => setState(() {
+                          _switchState = value;
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(value ? "开" : "关"),
+                            duration: const Duration(milliseconds: 100),
+                          ));
+                        })),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("是否选择:"),
+                  Checkbox(
+                    value: _checkboxState,
+                    activeColor: Colors.red,
+                    onChanged: (value) => setState(() {
+                      _checkboxState = value ?? false;
+                    }),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("三种选择状态:"),
+                Checkbox(
+                    value: _checkboxState2,
+                    activeColor: Colors.black,
+                    tristate: true,
+                    onChanged: (value) => setState(() {
+                          _checkboxState2 = value;
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text((value == null)
+                                ? "没有选项的状态"
+                                : (value ? "选择" : "不选择")),
+                            duration: const Duration(milliseconds: 100),
+                          ));
+                        }))
+              ],
+            )
           ],
         ))));
   }

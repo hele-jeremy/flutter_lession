@@ -38,6 +38,7 @@ https://mp.weixin.qq.com/s/tSJ9e6byBlQ5zTHRILHvRQ
 flutter电子书教程:
 https://book.flutterchina.club
 https://guoshuyu.cn/home/wx/
+https://xuyisheng.top/(徐宜生讲了很多关于Flutter的教程)
 
 
 
